@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}Title{% endblock %}
+{% block title %}报告列表{% endblock %}
 
 {% block content %}
     <table>
         <tr>
             <td>
                 {% for report in reports %}
-                    <li>{{ report }}</li>
+                    <li><a href="{% url 'reports:show_report' report.id %}">{{ report }}</a></li>
                 {% empty %}
                     <li>还没有报告</li>
                 {% endfor %}

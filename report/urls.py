@@ -20,5 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # 首页
     path('', include(('home.urls', 'home'), namespace='index')),
-    path('reports.html', include(('reports.urls', 'reports'), namespace='reports'))
+    path('reports/', include(('reports.urls', 'reports'), namespace='reports'))
 ]

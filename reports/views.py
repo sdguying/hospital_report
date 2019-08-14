@@ -26,3 +26,13 @@ def reports_index(request):
     return render(request, 'reports/reports.html', context)
 
 
+def show_report(request, report_id):
+    """体检报告详细内容显示页面"""
+    report = Report.objects.get(id=report_id)
+
+    context = {
+        'report': report,
+    }
+    return render(request, 'reports/show_report.html', context)
+
+
