@@ -1,6 +1,6 @@
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
-from .models import Report
+from .models import Report, Entry
 from .forms import ReportForm
 
 # Create your views here.
@@ -29,9 +29,11 @@ def reports_index(request):
 def show_report(request, report_id):
     """体检报告详细内容显示页面"""
     report = Report.objects.get(id=report_id)
+    entries = Entry.objects.all()
 
     context = {
         'report': report,
+        'entries': entries,
     }
     return render(request, 'reports/show_report.html', context)
 

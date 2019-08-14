@@ -12,6 +12,15 @@
         <tr><td>{{ report.date }}</td></tr>
     </table>
     <table>
-        <tr><th></th></tr>
+        {% for entry in entries %}
+            {% if entry.report_id == report.id %}
+                <tr><td>{{ entry.category }}</td></tr>
+                <tr><td>{{ entry.name }}</td></tr>
+                <tr><td>{{ entry.check_results }}</td></tr>
+                <tr><td>{{ entry.unit }}</td></tr>
+                <tr><td>{{ entry.reference_range }}</td></tr>
+                <tr><td>{{ entry.tips }}</td></tr>
+            {% endif %}
+        {% endfor %}
     </table>
 {% endblock %}
