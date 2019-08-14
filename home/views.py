@@ -6,9 +6,5 @@ from reports.models import Report
 
 def index(request):
     """home首页"""
-    reports = Report.objects.all()
 
-    context = {
-        'reports': reports
-    }
-    return render(request, 'home/index.html', context)
+    return render(request, 'home/index.html')

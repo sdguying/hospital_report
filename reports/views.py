@@ -4,15 +4,11 @@ from .models import Report
 # Create your views here.
 
 
-def index(request):
-    """首页"""
-    return render(request, 'index.html')
-
-
 def reports_index(request):
-    report = Report.objects.all()
+    """体检报告首页"""
+    reports = Report.objects.all()
 
     context = {
-        'report': report,
+        'reports': reports,
     }
     return render(request, 'reports/reports.html', context)

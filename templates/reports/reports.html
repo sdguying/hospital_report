@@ -1,15 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<p>
-<p>{% for report in report_info %}
-    <tr>
-    <td>{{ report }}</td>
-    </tr>
-{% endfor %}</p>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}Title{% endblock %}
+
+{% block content %}
+    <table>
+        <tr>
+            <td>
+                {% for report in reports %}
+                    <li>{{ report }}</li>
+                {% empty %}
+                    <li>还没有报告</li>
+                {% endfor %}
+            </td>
+        </tr>
+    </table>
+
+{% endblock %}

@@ -3,17 +3,16 @@
 {% block title %}首页{% endblock %}
 
 {% block content %}
-    <div>
-    <td>
-    <tr>这里是您的体检报告</tr>
-    <tr>
-        {% for report in reports %}
-            <li>{{ report }}</li>
-            {% empty %}
-            <li>还没有体检报告</li>
-        {% endfor %}
-    </tr>
-    </td>
-    </div>
+    <table>
+        <tr>
+            <td>这里列出有问题的指标多年来的趋势</td>
+        </tr>
+        <tr>
+            <td>自动筛选出某个有问题的指标进行数据可视化1</td>
+        </tr>
+        <tr>
+            <td>自动筛选出某个有问题的指标进行数据可视化2</td>
+        </tr>
+    </table>
 
 {% endblock %}
