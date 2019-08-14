@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}首页{% endblock %}
+
+{% block content %}
+    <div>
+    <td>
+    <tr>这里是您的体检报告</tr>
+    <tr>
+        {% for report in reports %}
+            <li>{{ report }}</li>
+            {% empty %}
+            <li>还没有体检报告</li>
+        {% endfor %}
+    </tr>
+    </td>
+    </div>
+
+{% endblock %}
