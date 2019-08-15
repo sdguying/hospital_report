@@ -1,26 +1,48 @@
 {% extends 'base.html' %}
 {% block title %}详细内容{% endblock %}
 {% block content %}
-    <table>
-        <tr><td>{{ report.title }}</td></tr>
-        <tr><td>{{ report.report_num }}</td></tr>
-        <tr><td>{{ report.name }}</td></tr>
-        <tr><td>{{ report.sex }}</td></tr>
-        <tr><td>{{ report.age }}</td></tr>
-        <tr><td>{{ report.work_unit }}</td></tr>
-        <tr><td>{{ report.hospital }}</td></tr>
-        <tr><td>{{ report.date }}</td></tr>
-    </table>
-    <table>
-        {% for entry in entries %}
-            {% if entry.report_id == report.id %}
-                <tr><td>{{ entry.category }}</td></tr>
-                <tr><td>{{ entry.name }}</td></tr>
-                <tr><td>{{ entry.check_results }}</td></tr>
-                <tr><td>{{ entry.unit }}</td></tr>
-                <tr><td>{{ entry.reference_range }}</td></tr>
-                <tr><td>{{ entry.tips }}</td></tr>
-            {% endif %}
-        {% endfor %}
+    <table border="1">
+        <tr>
+            <th>{{ report.title }}</th>
+            <th>检查项目信息</th>
+        </tr>
+        <tr>
+            <td>
+                <table>
+                    <tr><td>{{ report.report_num }}</td></tr>
+                    <tr><td>{{ report.name }}</td></tr>
+                    <tr><td>{{ report.sex }}</td></tr>
+                    <tr><td>{{ report.age }}</td></tr>
+                    <tr><td>{{ report.work_unit }}</td></tr>
+                    <tr><td>{{ report.hospital }}</td></tr>
+                    <tr><td>{{ report.date }}</td></tr>
+                </table>
+            </td>
+            <td>
+                <table>
+                    <tr><td><h2>内科</h2></td></tr>
+                        {% for entry in entries %}
+                        {% if entry.category == '内科' %}
+                        <tr><td>{{ entry.name }} {{ entry.check_results }} {{ entry.unit }}
+                             {{ entry.reference_range }} {{ entry.tips }}</td></tr>
+                        {% endif %}
+                        {% endfor %}
+                    <tr><td><h2>血压</h2></td></tr>
+                        {% for entry in entries %}
+                        {% if entry.category == '血压' %}
+                        <tr><td>{{ entry.name }} {{ entry.check_results }} {{ entry.unit }}
+                             {{ entry.reference_range }} {{ entry.tips }}</td></tr>
+                        {% endif %}
+                        {% endfor %}
+                    <tr><td><h2>心电图</h2></td></tr>
+                        {% for entry in entries %}
+                        {% if entry.category == '心电图' %}
+                        <tr><td>{{ entry.name }} {{ entry.check_results }} {{ entry.unit }}
+                             {{ entry.reference_range }} {{ entry.tips }}</td></tr>
+                        {% endif %}
+                        {% endfor %}
+                </table>
+            </td>
+        </tr>
     </table>
 {% endblock %}
