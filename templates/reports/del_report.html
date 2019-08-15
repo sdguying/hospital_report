@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}删除报告信息{% endblock %}
+{% block content %}
+    <h4>{{ report }}的信息</h4>
+    <p>{{ report.title }}</p>
+    <p>{{ report.report_num }}</p>
+    <p>{{ report.name }}</p>
+    <p>{{ report.sex }}</p>
+    <p>{{ report.age }}</p>
+    <p>{{ report.work_unit }}</p>
+    <p>{{ report.date }}</p>
+
+    <form action="{% url 'reports:del_report' report.id %}" method="post">
+        {% csrf_token %}
+        <p>您确定要删除该报告吗？</p>
+        <button name="submit">提交删除</button> - <a href="{% url 'reports:reports_index' %}">放弃</a>
+    </form>
+
+{% endblock %}

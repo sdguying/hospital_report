@@ -23,7 +23,7 @@ def reports_index(request):
         'reports': reports,
         'form': form,
     }
-    return render(request, 'reports/reports.html', context)
+    return render(request, 'reports/reports_index.html', context)
 
 
 def show_report(request, report_id):
@@ -55,6 +55,20 @@ def edit_report_info(request, report_id):
         'report': report,
     }
     return render(request, 'reports/edit_report_info.html', context)
+
+
+def del_report(request, report_id):
+    """删除报告功能"""
+    report = Report.objects.get(id=report_id)
+
+    if request.method != 'POST':
+        context = {
+            'report': report,
+        }
+        return render(request, 'reports/del_report.html', context)
+    else:
+        report.delete()
+        return HttpResponseRedirect(reverse('reports:reports_index'))
 
 
 

@@ -6,7 +6,8 @@
         <tr>
             <td>
                 {% for report in reports %}
-                    <li><a href="{% url 'reports:show_report' report.id %}">{{ report }}</a></li>
+                    <li><a href="{% url 'reports:show_report' report.id %}">{{ report }}</a>
+                        <a href="{% url 'reports:del_report' report.id %}">删除该报告</a></li>
                 {% empty %}
                     <li>还没有报告</li>
                 {% endfor %}
