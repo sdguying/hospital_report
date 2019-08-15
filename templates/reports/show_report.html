@@ -23,22 +23,28 @@
                     <tr><td><h2>内科</h2></td></tr>
                         {% for entry in entries %}
                         {% if entry.category == '内科' %}
-                        <tr><td>{{ entry.name }} {{ entry.check_results }} {{ entry.unit }}
-                             {{ entry.reference_range }} {{ entry.tips }}</td></tr>
+                            {% if entry.report_id == report.id %}
+                            <tr><td>{{ entry.name }} {{ entry.check_results }} {{ entry.unit }}
+                                 {{ entry.reference_range }} {{ entry.tips }}</td></tr>
+                             {% endif %}
                         {% endif %}
                         {% endfor %}
                     <tr><td><h2>血压</h2></td></tr>
                         {% for entry in entries %}
                         {% if entry.category == '血压' %}
-                        <tr><td>{{ entry.name }} {{ entry.check_results }} {{ entry.unit }}
-                             {{ entry.reference_range }} {{ entry.tips }}</td></tr>
+                            {% if entry.report_id == report.id %}
+                            <tr><td>{{ entry.name }} {{ entry.check_results }} {{ entry.unit }}
+                                 {{ entry.reference_range }} {{ entry.tips }}</td></tr>
+                             {% endif %}
                         {% endif %}
                         {% endfor %}
                     <tr><td><h2>心电图</h2></td></tr>
                         {% for entry in entries %}
                         {% if entry.category == '心电图' %}
-                        <tr><td>{{ entry.name }} {{ entry.check_results }} {{ entry.unit }}
-                             {{ entry.reference_range }} {{ entry.tips }}</td></tr>
+                            {% if entry.report_id == report.id %}
+                            <tr><td>{{ entry.name }} {{ entry.check_results }} {{ entry.unit }}
+                                 {{ entry.reference_range }} {{ entry.tips }}</td></tr>
+                             {% endif %}
                         {% endif %}
                         {% endfor %}
                 </table>
