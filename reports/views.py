@@ -38,3 +38,23 @@ def show_report(request, report_id):
     return render(request, 'reports/show_report.html', context)
 
 
+def edit_report_info(request, report_id):
+    """修改报告基本信息"""
+    report = Report.objects.get(id=report_id)
+
+    if request.method != 'POST':
+        form = ReportForm(instance=report)
+    else:
+        form = ReportForm(instance=report, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('reports:show_report', args=[report.id]))
+
+    context = {
+        'form': form,
+        'report': report,
+    }
+    return render(request, 'reports/edit_report_info.html', context)
+
+
+

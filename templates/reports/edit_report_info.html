@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}修改报告信息{% endblock %}
+{% block content %}
+    <form action="{% url 'reports:edit_report_info' report.id %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button name="submit">提交</button>
+    </form>
+{% endblock %}

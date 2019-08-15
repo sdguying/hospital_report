@@ -3,7 +3,7 @@
 {% block content %}
     <table border="1">
         <tr>
-            <th>{{ report.title }}</th>
+            <th>{{ report.title }} - <a href="{% url 'reports:edit_report_info' report.id %}">修改</a></th>
             <th>检查项目信息</th>
         </tr>
         <tr>
