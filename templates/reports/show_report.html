@@ -16,38 +16,25 @@
                     <tr><td>{{ report.work_unit }}</td></tr>
                     <tr><td>{{ report.hospital }}</td></tr>
                     <tr><td>{{ report.date }}</td></tr>
+                    <tr>
+                        <td><h5>添加项目</h5></td>
+                    </tr>
+                    <tr>
+                        <td><form action="{% url 'reports:show_report' report.id %}" method="post">{% csrf_token %}
+                            <p>所属报告{{ form.report }}</p>
+                            <p>所属科室{{ form.category }}</p>
+                            <p>项目{{ form.name }}</p>
+                            <p>检查结果{{ form.check_results }}</p>
+                            <p>单位{{ form.unit }}</p>
+                            <p>范围{{ form.reference_range }}</p>
+                            <p>提示{{ form.tips }}</p>
+                            <button name="submit">提交</button>
+                        </form></td>
+                    </tr>
                 </table>
             </td>
             <td>
-                <table>
-                    <tr><td><h2>内科</h2></td></tr>
-                        {% for entry in entries %}
-                        {% if entry.category == '内科' %}
-                            {% if entry.report_id == report.id %}
-                            <tr><td>{{ entry.name }} {{ entry.check_results }} {{ entry.unit }}
-                                 {{ entry.reference_range }} {{ entry.tips }}</td></tr>
-                             {% endif %}
-                        {% endif %}
-                        {% endfor %}
-                    <tr><td><h2>血压</h2></td></tr>
-                        {% for entry in entries %}
-                        {% if entry.category == '血压' %}
-                            {% if entry.report_id == report.id %}
-                            <tr><td>{{ entry.name }} {{ entry.check_results }} {{ entry.unit }}
-                                 {{ entry.reference_range }} {{ entry.tips }}</td></tr>
-                             {% endif %}
-                        {% endif %}
-                        {% endfor %}
-                    <tr><td><h2>心电图</h2></td></tr>
-                        {% for entry in entries %}
-                        {% if entry.category == '心电图' %}
-                            {% if entry.report_id == report.id %}
-                            <tr><td>{{ entry.name }} {{ entry.check_results }} {{ entry.unit }}
-                                 {{ entry.reference_range }} {{ entry.tips }}</td></tr>
-                             {% endif %}
-                        {% endif %}
-                        {% endfor %}
-                </table>
+
             </td>
         </tr>
     </table>

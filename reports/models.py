@@ -61,6 +61,11 @@ class Summary(models.Model):
 
 class Entry(models.Model):
     """具体项目"""
+    tips_choice = (
+        ('up', '↑'),
+        ('down', '↓'),
+    )
+
     report = models.ForeignKey(Report, on_delete=models.CASCADE, verbose_name='所属报告')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='科室')
 
@@ -68,7 +73,7 @@ class Entry(models.Model):
     check_results = models.TextField(verbose_name='检查结果')
     unit = models.CharField(max_length=10, verbose_name='单位', blank=True)
     reference_range = models.CharField(max_length=20, verbose_name='参考范围', blank=True)
-    tips = models.CharField(max_length=10, verbose_name='提示', blank=True)
+    tips = models.CharField(choices=tips_choice, max_length=10, verbose_name='提示', blank=True)
 
     class Meta:
         verbose_name_plural = '检查项目'
