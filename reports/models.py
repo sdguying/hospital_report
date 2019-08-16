@@ -14,7 +14,7 @@ class Report(models.Model):
 
     hospital = models.CharField(max_length=200, verbose_name='医院')
     title = models.CharField(max_length=80, verbose_name='标题', default='20**年报告')
-    report_num = models.CharField(max_length=20, verbose_name='体检编号', unique=False)
+    report_num = models.CharField(max_length=20, verbose_name='体检编号', unique=False, blank=False)
     name = models.CharField(max_length=5, verbose_name='姓名')
     sex = models.CharField(choices=sex_choices, max_length=5, verbose_name='性别', default='boy')
     age = models.IntegerField(verbose_name='年龄', blank=False, default='0')
@@ -30,22 +30,40 @@ class Report(models.Model):
         return self.title
 
 
-class Summary(models.Model):
-    """小结"""
-    category_choice = (
+class Category(models.Model):
+    """某份报告的检查科室"""
+    name_choices = (
+        ('无可选项', '无可选项'),
         ('内科', '内科'),
         ('血压', '血压'),
         ('心电图', '心电图'),
-        ('彩超', '彩超'),
-        ('放射科', '放射科'),
         ('血常规', '血常规'),
-        ('生化', '生化'),
-        ('免疫', '免疫'),
-        ('肿瘤', '肿瘤'),
+        ('尿常规', '尿常规'),
+        ('彩超', '彩超'),
+        ('胸部CT', '胸部CT'),
+        ('甲状腺彩超', '甲状腺彩超'),
+        ('血糖', '血糖'),
+        ('血脂4项', '血脂4项'),
+        ('肾功能4项', '肝功能7项'),
+        ('肿瘤常规', '肿瘤常规')
     )
+    name = models.CharField(choices=name_choices, max_length=200,
+                            verbose_name='科室大类',default='无可选项')
+    name_w = models.CharField(max_length=200, verbose_name='科室大类', blank=True, unique=False)
 
+    class Meta:
+        verbose_name_plural = '科室大类'
+        verbose_name = verbose_name_plural
+
+    def __str__(self):
+        return self.name
+
+
+class Summary(models.Model):
+    """某份报告某个大类的小结"""
     report = models.ForeignKey(Report, on_delete=models.CASCADE, verbose_name='所属报告')
-    category = models.CharField(choices=category_choice, max_length=80, verbose_name='所属科室', default='内科')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE,
+                                 verbose_name='所属科室')
 
     content = models.TextField(verbose_name='小结内容')
     doctor = models.CharField(max_length=80, verbose_name='小结医生')
@@ -60,21 +78,8 @@ class Summary(models.Model):
 
 class Entry(models.Model):
     """具体项目"""
-
-    category_choice = (
-        ('内科', '内科'),
-        ('血压', '血压'),
-        ('心电图', '心电图'),
-        ('彩超', '彩超'),
-        ('放射科', '放射科'),
-        ('血常规', '血常规'),
-        ('生化', '生化'),
-        ('免疫', '免疫'),
-        ('肿瘤', '肿瘤'),
-    )
-
-    report = models.ForeignKey(Report, verbose_name='所属报告', on_delete=models.CASCADE, default='')
-    category = models.CharField(choices=category_choice, max_length=80, verbose_name='科室', default='内科')
+    report = models.ForeignKey(Report, on_delete=models.CASCADE, verbose_name='所属报告')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='科室')
 
     name = models.CharField(max_length=50, verbose_name='项目名称')
     check_results = models.TextField(verbose_name='检查结果')
