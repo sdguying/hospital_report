@@ -1,7 +1,7 @@
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
 from .models import Report, Entry
-from .forms import ReportForm
+from .forms import ReportForm, CategoryForm
 
 # Create your views here.
 
