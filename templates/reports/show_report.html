@@ -21,7 +21,7 @@
                     </tr>
                     <tr>
                         <td><form action="{% url 'reports:show_report' report.id %}" method="post">{% csrf_token %}
-                            <p>所属报告{{ form.report }}</p>
+{#                            <p>所属报告{{ form.report }}</p>#}
                             <p>所属科室{{ form.category }}</p>
                             <p>项目{{ form.name }}</p>
                             <p>检查结果{{ form.check_results }}</p>

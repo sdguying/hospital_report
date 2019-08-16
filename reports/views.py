@@ -38,7 +38,9 @@ def show_report(request, report_id):
         form = EntryForm(request.POST)
         if form.is_valid():
             # if form not in [x for x in category]:
-            form.save()
+            data = form.save(commit=False)
+            data.report_id = report_id
+            data.save()
             return HttpResponseRedirect(reverse('reports:show_report', args=[report.id]))
 
     context = {
