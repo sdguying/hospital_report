@@ -32,24 +32,7 @@ class Report(models.Model):
 
 class Category(models.Model):
     """某份报告的检查科室"""
-    name_choices = (
-        ('无可选项', '无可选项'),
-        ('内科', '内科'),
-        ('血压', '血压'),
-        ('心电图', '心电图'),
-        ('血常规', '血常规'),
-        ('尿常规', '尿常规'),
-        ('彩超', '彩超'),
-        ('胸部CT', '胸部CT'),
-        ('甲状腺彩超', '甲状腺彩超'),
-        ('血糖', '血糖'),
-        ('血脂4项', '血脂4项'),
-        ('肾功能4项', '肝功能7项'),
-        ('肿瘤常规', '肿瘤常规')
-    )
-    name = models.CharField(choices=name_choices, max_length=200,
-                            verbose_name='科室大类',default='无可选项')
-    name_w = models.CharField(max_length=200, verbose_name='科室大类', blank=True, unique=False)
+    name = models.CharField(max_length=200, verbose_name='科室大类', unique=False)
 
     class Meta:
         verbose_name_plural = '科室大类'
@@ -98,7 +81,7 @@ class Entry(models.Model):
 class Conclusion(models.Model):
     """总检结论"""
 
-    report = models.ForeignKey(Report, verbose_name='所属报告', on_delete=models.CASCADE, unique=True)
+    report = models.OneToOneField(Report, verbose_name='所属报告', on_delete=models.CASCADE)
 
     overview = models.TextField(verbose_name='综述')
     proposal = models.TextField(verbose_name='建议')

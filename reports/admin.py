@@ -9,7 +9,7 @@ class ReportAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'name_w')
+    list_display = ('name',)
 
 
 class EntryAdmin(admin.ModelAdmin):
