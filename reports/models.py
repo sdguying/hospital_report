@@ -13,7 +13,7 @@ class Report(models.Model):
     )
 
     hospital = models.CharField(max_length=200, verbose_name='医院')
-    title = models.CharField(max_length=80, verbose_name='标题', default='20**年报告')
+    title = models.CharField(max_length=80, verbose_name='标题', default='20**年报告', unique=True)
     report_num = models.CharField(max_length=20, verbose_name='体检编号', unique=False, blank=False)
     name = models.CharField(max_length=5, verbose_name='姓名')
     sex = models.CharField(choices=sex_choices, max_length=5, verbose_name='性别', default='boy')
@@ -98,7 +98,7 @@ class Entry(models.Model):
 class Conclusion(models.Model):
     """总检结论"""
 
-    report = models.ForeignKey(Report, verbose_name='所属报告', on_delete=models.CASCADE)
+    report = models.ForeignKey(Report, verbose_name='所属报告', on_delete=models.CASCADE, unique=True)
 
     overview = models.TextField(verbose_name='综述')
     proposal = models.TextField(verbose_name='建议')
