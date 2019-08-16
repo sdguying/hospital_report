@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}新增科室{% endblock %}
+{% block content %}
+    <table>
+        <thead>
+        <tr><td><h4>现有科室名称</h4></td></tr>
+        </thead>
+        <tbody>
+        {% for category in categories %}
+            <tr>
+                <td>
+                    {{ category.name }}
+                </td>
+            </tr>
+        {% endfor %}
+            <tr>
+                <td><form action="{% url 'reports:add_new_category' %}" method="post">{% csrf_token %}
+                    {{ form.as_p }}
+                    <button name="submit">新增</button>
+                </form></td>
+            </tr>
+        </tbody>
+    </table>
+
+{% endblock %}

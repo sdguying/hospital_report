@@ -1,7 +1,7 @@
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
 from .models import Report, Entry, Category
-from .forms import ReportForm, CategoryForm, EntryForm
+from .forms import ReportForm, CategoryForm_w, EntryForm
 
 # Create your views here.
 
@@ -29,7 +29,7 @@ def reports_index(request):
 def show_report(request, report_id):
     """体检报告详细内容显示页面"""
     report = Report.objects.get(id=report_id)
-    category = Category.objects.all()
+    # category = Category.objects.all()
     entries = Entry.objects.all()
 
     if request.method != 'POST':
@@ -37,7 +37,6 @@ def show_report(request, report_id):
     else:
         form = EntryForm(request.POST)
         if form.is_valid():
-            # if form not in [x for x in category]:
             data = form.save(commit=False)
             data.report_id = report_id
             data.save()
@@ -84,4 +83,18 @@ def del_report(request, report_id):
         return HttpResponseRedirect(reverse('reports:reports_index'))
 
 
+def add_new_category(request):
+    """新增科室"""
+    categories = Category.objects.all()
 
+    if request.method != 'POST':
+        form = CategoryForm_w()
+    else:
+        form = CategoryForm_w(request.POST)
+        if form.is_valid():
+            form.save()
+    context = {
+        'categories': categories,
+        'form': form,
+    }
+    return render(request, 'reports/add_new_category.html', context)
