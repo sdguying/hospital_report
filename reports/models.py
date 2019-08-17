@@ -62,8 +62,8 @@ class Summary(models.Model):
 class Entry(models.Model):
     """具体项目"""
     tips_choice = (
-        ('up', '↑'),
-        ('down', '↓'),
+        ('↑', '↑'),
+        ('↓', '↓'),
     )
 
     report = models.ForeignKey(Report, on_delete=models.CASCADE, verbose_name='所属报告')

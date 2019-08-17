@@ -34,9 +34,9 @@
                 </table>
             </td>
             <td>
+                {% for key, values in dicts.items %}
+                        <h3>{{ key }}</h3>
                 <table>
-                    {% for category_name in category_name_list %}
-                        <p>{{ category_name }}</p>
                     <thead>
                         <tr>
                             <th>项目 </th>
@@ -47,19 +47,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for entry in entries %}
-                            {% if entry.category_id == %}
+{#                        {% for key, values in dicts.items %}#}
+                            {% for value in values %}
                         <tr>
-                            <td> {{ entry.name }}</td>
-                            <td> {{ entry.check_results }}</td>
-                            <td> {{ entry.unit }}</td></tr>
-                            <td> {{ entry.reference_range }}</td>
-                            <td> {{ entry.tips }}</td>
+                            <td> {{ value.name }}</td>
+                            <td> {{ value.check_results }}</td>
+                            <td> {{ value.unit }}</td>
+                            <td> {{ value.reference_range }}</td>
+                            <td> {{ value.tips }}</td>
                         </tr>
-                        {% endfor %}
+                           {% endfor %}
                     </tbody>
-                    {% endfor %}
                 </table>
+                    {% empty %}
+                    <p>还没有添加具体的检查项目，现在就从左边栏表单开始添加吧</p>
+            {% endfor %}
             </td>
         </tr>
     </table>

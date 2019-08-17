@@ -41,20 +41,26 @@ def show_report(request, report_id):
             data.save()
             return HttpResponseRedirect(reverse('reports:show_report', args=[report.id]))
 
-    entries = Entry.objects.filter(report_id=report_id)
-    categories = Category.objects.all()
-    #
-    category_id_list = list(set([ entry.id for entry in entries ]))
-    # 找出该报告中有的科室放到列表中
-    category_name_list = []
+    entries = Entry.objects.filter(report_id=report_id) #单一报告下所有的具体检查项目
+    categories = Category.objects.all()  # 所有的科室
+    # set排序并去重，建立一个不重复的该报告有的所有科室id，作为字典的key
+    category_id_list = list(set([entry.category_id for entry in entries]))
+    # 通过entry.category_id找出该报告中有的科室名称放到列表中
+    # category_name_list = []
+    dicts ={}
     for category in categories:
         if category.id in category_id_list:
-            category_name_list.append(category.name)
+            # category_name_list.append(category.name)
+            entry_list = [ entry for entry in entries if entry.category_id == category.id ]
+            dicts[category.name] = entry_list
+            # entry_list.clear()
 
     context = {
         'report': report,
-        'entries': entries,
-        'category_name_list': category_name_list,
+        'dicts': dicts,
+        # 'entries': entries,
+        # 'category_name_list': category_name_list,
+        # 'category_id_list': category_id_list,
         'form': form,
     }
     return render(request, 'reports/show_report.html', context)
