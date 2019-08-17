@@ -3,7 +3,7 @@ reports表单
 """
 
 from django import forms
-from .models import Report
+from .models import Report, Category, Entry
 
 
 class ReportForm(forms.ModelForm):
@@ -30,3 +30,49 @@ class ReportForm(forms.ModelForm):
             'hospital': '医院',
             'date': '日期',
         }
+
+
+class CategoryForm(forms.Form):
+    """为category模型作一个动态的下拉框"""
+    category = forms.ChoiceField(label='科室')
+
+    def __init__(self, *args, **kwargs):
+        """"""
+        super(CategoryForm, self).__init__(*args, **kwargs)
+        self.fields['category'].choices = (( x.name ) for x in Category.objects.all())
+
+
+class CategoryForm_w(forms.ModelForm):
+    """科室表单"""
+    class Meta:
+        model = Category
+        fields = [
+            'name',
+        ]
+        labels = {
+            'name': '填入科室'
+        }
+
+
+class EntryForm(forms.ModelForm):
+    """具体项目表单"""
+    class Meta:
+        model = Entry
+        fields = [
+            'category',
+            'name',
+            'check_results',
+            'unit',
+            'reference_range',
+            'tips',
+        ]
+        labels = {
+            'category': '所属科室',
+            'name': '项目名称',
+            'check_results': '检查结果',
+            'unit': '单位',
+            'reference_range': '参考范围',
+            'tips': '提示',
+        }
+
+
