@@ -29,8 +29,7 @@ def reports_index(request):
 def show_report(request, report_id):
     """体检报告详细内容显示页面"""
     report = Report.objects.get(id=report_id)
-    # category = Category.objects.all()
-    entries = Entry.objects.all()
+    # entries = Entry.objects.all()
 
     if request.method != 'POST':
         form = EntryForm()
@@ -42,9 +41,20 @@ def show_report(request, report_id):
             data.save()
             return HttpResponseRedirect(reverse('reports:show_report', args=[report.id]))
 
+    entries = Entry.objects.filter(report_id=report_id)
+    categories = Category.objects.all()
+    #
+    category_id_list = list(set([ entry.id for entry in entries ]))
+    # 找出该报告中有的科室放到列表中
+    category_name_list = []
+    for category in categories:
+        if category.id in category_id_list:
+            category_name_list.append(category.name)
+
     context = {
         'report': report,
         'entries': entries,
+        'category_name_list': category_name_list,
         'form': form,
     }
     return render(request, 'reports/show_report.html', context)

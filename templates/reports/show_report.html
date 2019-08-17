@@ -34,7 +34,32 @@
                 </table>
             </td>
             <td>
-
+                <table>
+                    {% for category_name in category_name_list %}
+                        <p>{{ category_name }}</p>
+                    <thead>
+                        <tr>
+                            <th>项目 </th>
+                            <th>检查结果 </th>
+                            <th>单位 </th>
+                            <th>范围 </th>
+                            <th>提示 </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in entries %}
+                            {% if entry.category_id == %}
+                        <tr>
+                            <td> {{ entry.name }}</td>
+                            <td> {{ entry.check_results }}</td>
+                            <td> {{ entry.unit }}</td></tr>
+                            <td> {{ entry.reference_range }}</td>
+                            <td> {{ entry.tips }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    {% endfor %}
+                </table>
             </td>
         </tr>
     </table>
