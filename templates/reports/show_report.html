@@ -34,7 +34,34 @@
                 </table>
             </td>
             <td>
-
+                {% for key, values in dicts.items %}
+                        <h3>{{ key }}</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>项目 </th>
+                            <th>检查结果 </th>
+                            <th>单位 </th>
+                            <th>范围 </th>
+                            <th>提示 </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+{#                        {% for key, values in dicts.items %}#}
+                            {% for value in values %}
+                        <tr>
+                            <td> {{ value.name }}</td>
+                            <td> {{ value.check_results }}</td>
+                            <td> {{ value.unit }}</td>
+                            <td> {{ value.reference_range }}</td>
+                            <td> {{ value.tips }}</td>
+                        </tr>
+                           {% endfor %}
+                    </tbody>
+                </table>
+                    {% empty %}
+                    <p>还没有添加具体的检查项目，现在就从左边栏表单开始添加吧</p>
+            {% endfor %}
             </td>
         </tr>
     </table>
