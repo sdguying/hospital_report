@@ -98,3 +98,47 @@ def add_new_category(request):
         'form': form,
     }
     return render(request, 'reports/add_new_category.html', context)
+
+
+def edit_category(request, category_id):
+    """修改科室名称"""
+    category = Category.objects.get(id=category_id)
+
+    if request.method != 'POST':
+        form = CategoryForm_w(instance=category)
+    else:
+        form = CategoryForm_w(instance=category, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('reports:add_new_category'))
+
+    context = {
+        'form': form,
+        'category': category,
+    }
+    return render(request, 'reports/edit_category.html', context)
+
+
+def del_category(request, category_id):
+    """删除科室"""
+    category = Category.objects.get(id=category_id)
+    message = ''
+
+    if request.method != 'POST':
+        context = {
+            'category': category,
+            'message': message,
+        }
+        return render(request, 'reports/del_category.html', context)
+    else:
+        try:
+            category.delete()
+        except:
+            message = '该科室下存在具体体检项目，不允许删除！'
+            context = {'message': message, 'category': category}
+            return render(request, 'reports/del_category.html', context)
+        else: # 在try没有任何异常的时候执行
+            return HttpResponseRedirect(reverse('reports:add_new_category'))
+
+
+

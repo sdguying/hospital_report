@@ -21,7 +21,7 @@
                     </tr>
                     <tr>
                         <td><form action="{% url 'reports:show_report' report.id %}" method="post">{% csrf_token %}
-                            <p>所属科室{{ form.category }}</p>
+                            <p>所属科室{{ form.category }} - <a href="{% url 'reports:add_new_category' %}">添加科室</a></p>
                             <p>项目{{ form.name }}</p>
                             <p>检查结果{{ form.check_results }}</p>
                             <p>单位{{ form.unit }}</p>
@@ -29,12 +29,6 @@
                             <p>提示{{ form.tips }}</p>
                             <button name="submit">提交</button>
                             </form>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h4>如果所属科室内没有您要的科室请在这里自主添加</h4>
-                            <p><a href="{% url 'reports:add_new_category' %}">添加科室</a></p>
                         </td>
                     </tr>
                 </table>

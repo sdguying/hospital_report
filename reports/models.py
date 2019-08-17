@@ -67,7 +67,7 @@ class Entry(models.Model):
     )
 
     report = models.ForeignKey(Report, on_delete=models.CASCADE, verbose_name='所属报告')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='科室')
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='科室')
 
     name = models.CharField(max_length=50, verbose_name='项目名称')
     check_results = models.TextField(verbose_name='检查结果')
