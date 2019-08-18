@@ -1,0 +1,5 @@
+### 如果出现NoReverseMatch   Reverse for 'edit_global_category' with no arguments not found. 1 pattern(s) tried:
+['reports\\/edit\\/(?P<report_id>[0-9]+)\\/edit_global_category\\.html$']错误，下面的定位还是定位在base.html模板，找不到
+位置，那么在模板中把导入base.html的语句注释掉，就能看到在哪里出现的问题。
+
+###

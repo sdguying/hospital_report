@@ -97,8 +97,8 @@ def del_report(request, report_id):
         return HttpResponseRedirect(reverse('reports:reports_index'))
 
 
-def add_new_category(request):
-    """新增科室"""
+def edit_global_category(request, report_id):
+    """编辑全局科室"""
     categories = Category.objects.all()
 
     if request.method != 'POST':
@@ -109,12 +109,13 @@ def add_new_category(request):
             form.save()
     context = {
         'categories': categories,
+        'report_id': report_id,
         'form': form,
     }
-    return render(request, 'reports/add_new_category.html', context)
+    return render(request, 'reports/edit_global_category.html', context)
 
 
-def edit_category(request, category_id):
+def edit_category(request, report_id, category_id):
     """修改科室名称"""
     category = Category.objects.get(id=category_id)
 
@@ -124,11 +125,12 @@ def edit_category(request, category_id):
         form = CategoryForm_w(instance=category, data=request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('reports:add_new_category'))
+            return HttpResponseRedirect(reverse('reports:edit_global_category', args=[report_id]))
 
     context = {
         'form': form,
         'category': category,
+        'report_id': report_id,
     }
     return render(request, 'reports/edit_category.html', context)
 
@@ -153,7 +155,7 @@ def edit_entry(request, entry_id):
 
 
 
-def del_category(request, category_id):
+def del_category(request, report_id, category_id):
     """删除科室"""
     category = Category.objects.get(id=category_id)
     message = ''
@@ -162,6 +164,7 @@ def del_category(request, category_id):
         context = {
             'category': category,
             'message': message,
+            'report_id': report_id,
         }
         return render(request, 'reports/del_category.html', context)
     else:
@@ -169,10 +172,14 @@ def del_category(request, category_id):
             category.delete()
         except:
             message = '该科室下存在具体体检项目，不允许删除！'
-            context = {'message': message, 'category': category}
+            context = {
+                'message': message,
+                'category': category,
+                'report_id': report_id,
+            }
             return render(request, 'reports/del_category.html', context)
         else: # 在try没有任何异常的时候执行
-            return HttpResponseRedirect(reverse('reports:add_new_category'))
+            return HttpResponseRedirect(reverse('reports:edit_global_category', args=[report_id]))
 
 
 def del_entry(request, entry_id):

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}修改科室{% endblock %}
 {% block content %}
-    <form action="{% url 'reports:edit_category' category.id %}" method="post">{% csrf_token %}
+    <form action="{% url 'reports:edit_category' report_id category.id %}" method="post">{% csrf_token %}
         {{ form.as_p }}
         <button name="submit">提交修改</button>
     </form>

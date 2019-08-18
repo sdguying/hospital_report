@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}新增科室{% endblock %}
+{% block title %}编辑全局科室{% endblock %}
 {% block content %}
     <table>
         <thead>
@@ -9,18 +9,18 @@
         {% for category in categories %}
             <tr>
                 <td>
-                    {{ category.name }} - <a href="{% url 'reports:edit_category' category.id %}">修改</a>
-                    - <a href="{% url 'reports:del_category' category.id %}">删除</a>
+                    {{ category.name }} - <a href="{% url 'reports:edit_category' report_id category.id %}">修改</a>
+                    - <a href="{% url 'reports:del_category' report_id category.id %}">删除</a>
                 </td>
             </tr>
             {% empty %}
             <p>还没有科室，那就开始添加吧</p>
         {% endfor %}
             <tr>
-                <td><form action="{% url 'reports:add_new_category' %}" method="post">{% csrf_token %}
+                <td><form action="{% url 'reports:edit_global_category' report_id %}" method="post">{% csrf_token %}
                     {{ form.as_p }}
                     <button name="submit">新增</button>
-                    <p><a href="#">返回来时的报告页</a></p>
+                    <p><a href="{% url 'reports:show_report' report_id %}">返回来时的报告页</a></p>
                 </form></td>
             </tr>
         </tbody>

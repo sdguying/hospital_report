@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block title %}删除科室{% endblock %}
 {% block content %}
-    <form action="{% url 'reports:del_category' category.id %}" method="post">{% csrf_token %}
+    <form action="{% url 'reports:del_category' report_id category.id %}" method="post">{% csrf_token %}
         <p>您确定要删除科室《{{ category.name }}》吗？如果该科室下有具体项目则不允许删除</p>
         <p>{% if message != '' %}{{ message }}{% endif %}</p>
-        <button name="submit">提交删除</button> - <a href="{% url 'reports:add_new_category' %}">放弃返回</a>
+        <button name="submit">提交删除</button> - <a href="{% url 'reports:edit_global_category' report_id %}">放弃返回</a>
     </form>
 {% endblock %}
