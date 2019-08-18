@@ -104,8 +104,6 @@ def del_report(request, report_id):
             return render(request, 'reports/del_report.html', context)
 
 
-
-
 def edit_global_category(request, report_id):
     """编辑全局科室"""
     categories = Category.objects.all()
@@ -165,14 +163,12 @@ def edit_entry(request, entry_id):
 
 
 def del_category(request, report_id, category_id):
-    """删除科室"""
+    """删除全局科室"""
     category = Category.objects.get(id=category_id)
-    message = ''
 
     if request.method != 'POST':
         context = {
             'category': category,
-            'message': message,
             'report_id': report_id,
         }
         return render(request, 'reports/del_category.html', context)
