@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 自建APP
+    'home',
     'reports',
+
 ]
 
 MIDDLEWARE = [
