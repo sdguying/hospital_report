@@ -29,7 +29,6 @@ def reports_index(request):
 def show_report(request, report_id):
     """体检报告详细内容显示页面"""
     report = Report.objects.get(id=report_id)
-    # entries = Entry.objects.all()
 
     if request.method != 'POST':
         form = EntryForm()
@@ -45,22 +44,20 @@ def show_report(request, report_id):
     categories = Category.objects.all()  # 所有的科室
     # set排序并去重，建立一个不重复的该报告有的所有科室id，作为字典的key
     category_id_list = list(set([entry.category_id for entry in entries]))
+
     # 通过entry.category_id找出该报告中有的科室名称放到列表中
-    # category_name_list = []
     dicts ={}
     for category in categories:
         if category.id in category_id_list:
-            # category_name_list.append(category.name)
+            # 把一个科室大类下的项目放到列表里
             entry_list = [ entry for entry in entries if entry.category_id == category.id ]
+            # 科室名称作为key，该科室大类下的检查项目作为value，放入dicts，循环
             dicts[category.name] = entry_list
-            # entry_list.clear()
 
     context = {
         'report': report,
         'dicts': dicts,
-        # 'entries': entries,
-        # 'category_name_list': category_name_list,
-        # 'category_id_list': category_id_list,
+        # 'entries': entries,    # 为了show_report页面中的具体检查项目的删除和修改功能准备资源
         'form': form,
     }
     return render(request, 'reports/show_report.html', context)
@@ -135,6 +132,26 @@ def edit_category(request, category_id):
     return render(request, 'reports/edit_category.html', context)
 
 
+def edit_entry(request, entry_id):
+    """修改检查项目"""
+    entry = Entry.objects.get(id=entry_id)
+
+    if request.method != 'POST':
+        form = EntryForm(instance=entry)
+    else:
+        form = EntryForm(instance=entry, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('reports:show_report', args=[entry.report_id]))
+
+    context = {
+        'form': form,
+        'entry':entry,
+    }
+    return render(request, 'reports/edit_entry.html', context)
+
+
+
 def del_category(request, category_id):
     """删除科室"""
     category = Category.objects.get(id=category_id)
@@ -155,6 +172,21 @@ def del_category(request, category_id):
             return render(request, 'reports/del_category.html', context)
         else: # 在try没有任何异常的时候执行
             return HttpResponseRedirect(reverse('reports:add_new_category'))
+
+
+def del_entry(request, entry_id):
+    """删除具体检查项目"""
+    entry = Entry.objects.get(id=entry_id)
+
+    if request.method != 'POST':
+        context = {
+            'entry': entry,
+            # 'report_id': report_id,
+        }
+        return render(request, 'reports/del_entry.html', context)
+    else:
+        entry.delete()
+        return HttpResponseRedirect(reverse('reports:show_report', args=[entry.report_id] ))
 
 
 

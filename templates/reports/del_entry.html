@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}删除体检单项{% endblock %}
+{% block content %}
+    <form action="{% url 'reports:del_entry' entry.id %}" method="post">
+        {% csrf_token %}
+        <p>您确定要删除{{ entry }}吗？</p>
+        <button name="submit">提交删除</button> -
+        <a href="{% url 'reports:show_report' entry.report_id %}">放弃返回</a>
+    </form>
+{% endblock %}

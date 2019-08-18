@@ -34,8 +34,8 @@
                 </table>
             </td>
             <td>
-                {% for key, values in dicts.items %}
-                        <h3>{{ key }}</h3>
+                {% for category_name, entries in dicts.items %}
+                        <h3>{{ category_name }}</h3>
                 <table>
                     <thead>
                         <tr>
@@ -47,14 +47,15 @@
                         </tr>
                     </thead>
                     <tbody>
-{#                        {% for key, values in dicts.items %}#}
-                            {% for value in values %}
+                            {% for entry in entries %}
                         <tr>
-                            <td> {{ value.name }}</td>
-                            <td> {{ value.check_results }}</td>
-                            <td> {{ value.unit }}</td>
-                            <td> {{ value.reference_range }}</td>
-                            <td> {{ value.tips }}</td>
+                            <td> {{ entry.name }}</td>
+                            <td> {{ entry.check_results }}</td>
+                            <td> {{ entry.unit }}</td>
+                            <td> {{ entry.reference_range }}</td>
+                            <td> {{ entry.tips }}</td>
+                            <td><a href="{% url 'reports:del_entry' entry.id %}">删除</a> -
+                                <a href="{% url 'reports:edit_entry' entry.id %}">修改</a></td>
                         </tr>
                            {% endfor %}
                     </tbody>
