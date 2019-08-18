@@ -21,7 +21,8 @@
                     </tr>
                     <tr>
                         <td><form action="{% url 'reports:show_report' report.id %}" method="post">{% csrf_token %}
-                            <p>所属科室{{ form.category }} - <a href="{% url 'reports:add_new_category' %}">添加科室</a></p>
+                            <p>所属科室{{ form.category }} -
+                                <a href="{% url 'reports:add_new_category' %}">添加/修改全局科室名称</a></p>
                             <p>项目{{ form.name }}</p>
                             <p>检查结果{{ form.check_results }}</p>
                             <p>单位{{ form.unit }}</p>

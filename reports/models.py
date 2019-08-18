@@ -8,15 +8,15 @@ class Report(models.Model):
     """体检报告的基本信息"""
 
     sex_choices = (
-        ('boy', '男'),
-        ('girl', '女'),
+        ('男', '男'),
+        ('女', '女'),
     )
 
     hospital = models.CharField(max_length=200, verbose_name='医院')
     title = models.CharField(max_length=80, verbose_name='标题', default='20**年报告', unique=True)
     report_num = models.CharField(max_length=20, verbose_name='体检编号', unique=False, blank=False)
     name = models.CharField(max_length=5, verbose_name='姓名')
-    sex = models.CharField(choices=sex_choices, max_length=5, verbose_name='性别', default='boy')
+    sex = models.CharField(choices=sex_choices, max_length=5, verbose_name='性别', default='男')
     age = models.IntegerField(verbose_name='年龄', blank=False, default='0')
     work_unit = models.CharField(verbose_name='工作单位', max_length=20, default='南京证券吴江营业部')
     date = models.DateTimeField(verbose_name='体检日期', default=timezone.now)
