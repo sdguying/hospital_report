@@ -86,15 +86,24 @@ def edit_report_info(request, report_id):
 def del_report(request, report_id):
     """删除报告功能"""
     report = Report.objects.get(id=report_id)
-
     if request.method != 'POST':
         context = {
             'report': report,
         }
         return render(request, 'reports/del_report.html', context)
     else:
-        report.delete()
-        return HttpResponseRedirect(reverse('reports:reports_index'))
+        if not report.entry_set.all():
+            report.delete()
+            return HttpResponseRedirect(reverse('reports:reports_index'))
+        else:
+            message = '该报告下存在录入的内容，禁止删除，请逐个清理完相关内容后再行删除。'
+            context = {
+                'report': report,
+                'message': message,
+            }
+            return render(request, 'reports/del_report.html', context)
+
+
 
 
 def edit_global_category(request, report_id):

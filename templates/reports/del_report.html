@@ -13,6 +13,7 @@
     <form action="{% url 'reports:del_report' report.id %}" method="post">
         {% csrf_token %}
         <p>您确定要删除该报告吗？</p>
+        <p>{{ message }}</p>
         <button name="submit">提交删除</button> - <a href="{% url 'reports:reports_index' %}">放弃</a>
     </form>
 
