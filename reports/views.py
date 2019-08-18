@@ -189,23 +189,27 @@ def del_entry(request, entry_id):
         return HttpResponseRedirect(reverse('reports:show_report', args=[entry.report_id] ))
 
 
+def find_category_name(x_id):
+    """通过category.id查找category.name"""
+    categories = Category.objects.all()
+    for category in categories:
+        if category.id == x_id:
+            return category.name
+
+
 def del_entries_of_category(request, report_id, category_id):
     """删除某个报告下面的整个科室下面的所有具体检查项目"""
     entries = Entry.objects.filter(report_id=report_id, category_id=category_id)
     report = Report.objects.get(id=report_id)
-    # 找出这些检查项目的报告id，返回时用
-    # report_id_list = []
-    # for entry in entries:
-    #     report_id_list.append(entry.report_id)
-    # report_id = list(set(report_id_list))[0]
-    #
-    # report = Report.objects.get(id=report_id)
-    # category = Category.objects.get(id=category_id)
+
+    category_name = find_category_name(category_id)
 
     if request.method != 'POST':
         context = {
             'entries': entries,
             'report': report,
+            'category_id': category_id,
+            'category_name': category_name,
         }
         return render(request, 'reports/del_entries_of_category.html', context)
     else:

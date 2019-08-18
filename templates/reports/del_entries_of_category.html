@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% block title %}删除报告科室内容{% endblock %}
 {% block content %}
+    <h3>《{{ report.title }}》下《{{ category_name }}》中的所有检查项目:</h3>
     {% for entry in entries %}
-        <h3>《{{ entry.report_id }}》下《{{ entry.category_id }}》中的所有检查项目:</h3>
         <p>{{ entry.name }}</p>
     {% endfor %}
-    <form action="{% url 'reports:del_entries_of_category' report.id category.id %}" method="post">{% csrf_token %}
+    <form action="{% url 'reports:del_entries_of_category' report.id category_id %}" method="post">{% csrf_token %}
         <p>您确定要删除该科室中所有检查项目吗？</p>
         <button name="submit">确认删除</button> - <a href="{% url 'reports:show_report' report.id %}">放弃返回</a>
     </form>
