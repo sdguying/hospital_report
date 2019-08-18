@@ -15,4 +15,5 @@ urlpatterns = [
     path('del/<int:category_id>/del_category.html', views.del_category, name='del_category'),
     path('del/<int:entry_id>/del_entry.html', views.del_entry, name='del_entry'),
     path('edit/<int:entry_id>/edit_entry.html', views.edit_entry, name='edit_entry'),
+    path('del/<category_id>/del_entries_of_category.html', views.del_entries_of_category, name='del_entries_of_category'),
 ]
