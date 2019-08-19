@@ -37,11 +37,13 @@
             <td>
                 {% for category_name, entries in dicts.items %}
                         <h3>{{ category_name }} -
-                            {% for entry in entries %}
-                                {% if forloop.last %}
-                                    <a href="{% url 'reports:del_entries_of_category' report.id entry.category_id %}">删除</a>
-                                {% endif %}
-                            {% endfor %}
+{#                            {% for entry in entries %}#}
+{#                                {% if forloop.last %}   {# 因为循环出的数据都是一样的，所以只取最后一个值 #}
+{#                                    <a href="{% url 'reports:del_entries_of_category' report.id entry.category_id %}">删除</a>#}
+{#                                {% endif %}#}
+{#                            {% endfor %}#}
+{#                            下面这一行和上面被注释的功能一样，可以直接用entries.0索引出一条数据，没必要循环#}
+                            <a href="{% url 'reports:del_entries_of_category' report.id entries.0.category_id %}">删除</a>
                         </h3>
                 <table>
                     <thead>
@@ -69,6 +71,18 @@
                            {% endfor %}
                     </tbody>
                 </table>
+                    <h5>小结 - <a href="#">添加</a></h5>
+                        {% for summary in summaries %}
+{#                            {% for entry in entries %}#}
+{#                                {% if forloop.last and entry.category_id == summary.category_id %}#}
+{#                                    <p>小结内容：{{ summary.content }} ；小结医生：{{ summary.doctor }}。 - <a href="#">修改</a></p>#}
+{#                                {% endif %}#}
+{#                            {% endfor %}#}
+{#                            因为entries里面数据的filed:category_id都是一样的，下面这一行和上面被注释的功能一样，可以直接用entries.0索引出一条数据，没必要循环#}
+                            {% if entries.0.category_id == summary.category_id %}
+                                <p>小结内容：{{ summary.content }} ；小结医生：{{ summary.doctor }}。 - <a href="#">修改</a></p>
+                            {% endif %}
+                        {% endfor%}
                     {% empty %}
                     <p>还没有添加具体的检查项目，现在就从左边栏表单开始添加吧</p>
             {% endfor %}

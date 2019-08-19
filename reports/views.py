@@ -1,6 +1,6 @@
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
-from .models import Report, Entry, Category
+from .models import Report, Entry, Category, Summary
 from .forms import ReportForm, CategoryForm_w, EntryForm
 
 # Create your views here.
@@ -39,8 +39,8 @@ def show_report(request, report_id):
             data.report_id = report_id
             data.save()
             return HttpResponseRedirect(reverse('reports:show_report', args=[report.id]))
-
-    entries = Entry.objects.filter(report_id=report_id) #单一报告下所有的具体检查项目
+    # 单一报告下所有的具体检查项目
+    entries = Entry.objects.filter(report_id=report_id)
     categories = Category.objects.all()  # 所有的科室
     # set排序并去重，建立一个不重复的该报告有的所有科室id，作为字典的key
     category_id_list = list(set([entry.category_id for entry in entries]))
@@ -56,9 +56,13 @@ def show_report(request, report_id):
         else:
             continue
 
+    # 小结的显示功能
+    summaries = Summary.objects.filter(report_id=report_id)
+
     context = {
         'report': report,
         'dicts': dicts,
+        'summaries': summaries,
         'form': form,
     }
     return render(request, 'reports/show_report.html', context)
@@ -161,7 +165,6 @@ def edit_entry(request, entry_id):
     return render(request, 'reports/edit_entry.html', context)
 
 
-
 def del_category(request, report_id, category_id):
     """删除全局科室"""
     category = Category.objects.get(id=category_id)
@@ -198,7 +201,7 @@ def del_entry(request, entry_id):
         return render(request, 'reports/del_entry.html', context)
     else:
         entry.delete()
-        return HttpResponseRedirect(reverse('reports:show_report', args=[entry.report_id] ))
+        return HttpResponseRedirect(reverse('reports:show_report', args=[entry.report_id]))
 
 
 def find_category_name(x_id):

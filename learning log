@@ -1,5 +1,12 @@
-### 如果出现NoReverseMatch   Reverse for 'edit_global_category' with no arguments not found. 1 pattern(s) tried:
+###
+如果出现NoReverseMatch   Reverse for 'edit_global_category' with no arguments not found. 1 pattern(s) tried:
 ['reports\\/edit\\/(?P<report_id>[0-9]+)\\/edit_global_category\\.html$']错误，下面的定位还是定位在base.html模板，找不到
 位置，那么在模板中把导入base.html的语句注释掉，就能看到在哪里出现的问题。
 
 ###
+{% if entries.0.category_id == summary.category_id %}
+    <p>小结内容：{{ summary.content }} ；小结医生：{{ summary.doctor }}。 - <a href="#">修改</a></p>
+{% endif %}
+如果entries是一个数据列表，列表里的所有数据其中一个field都是一样的，比如category_id， 就可以使用模板中的索引方法来取得该值，
+就不用for循环了。比如，list.index，示例如下
+entries.0.category_id，可以这么用。
