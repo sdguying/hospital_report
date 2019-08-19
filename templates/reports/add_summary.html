@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}添加小结{% endblock %}
+{% block content %}
+    <form action="{% url 'reports:add_summary' report.id category.id %}" method="post">{% csrf_token %}
+        <p>向《{{ report.title }}》的《{{ category.name }}》中添加小结：</p>
+        <p>小结内容：{{ form.content }}</p>
+        <p>小结医生：{{ form.doctor }}</p>
+        <button name="submit">提交</button> - <a href="{% url 'reports:show_report' report.id %}">返回来时的报告</a>
+    </form>
+{% endblock %}

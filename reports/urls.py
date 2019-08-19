@@ -26,4 +26,6 @@ urlpatterns = [
 
     path('del/<int:report_id>/<int:category_id>/del_entries_of_category.html',
          views.del_entries_of_category, name='del_entries_of_category'),
+
+    path('add/<int:report_id>/<int:category_id>/add_summary.html', views.add_summary, name='add_summary'),
 ]

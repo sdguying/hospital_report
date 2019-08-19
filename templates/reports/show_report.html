@@ -71,7 +71,7 @@
                            {% endfor %}
                     </tbody>
                 </table>
-                    <h5>小结 - <a href="#">添加</a></h5>
+                    <h5>小结 - <a href="{% url 'reports:add_summary' report.id entries.0.category_id %}">添加</a></h5>
                         {% for summary in summaries %}
 {#                            {% for entry in entries %}#}
 {#                                {% if forloop.last and entry.category_id == summary.category_id %}#}

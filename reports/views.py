@@ -1,7 +1,7 @@
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
 from .models import Report, Entry, Category, Summary
-from .forms import ReportForm, CategoryForm_w, EntryForm
+from .forms import ReportForm, CategoryForm_w, EntryForm, SummaryForm
 
 # Create your views here.
 
@@ -230,3 +230,33 @@ def del_entries_of_category(request, report_id, category_id):
     else:
         entries.delete()
         return HttpResponseRedirect(reverse('reports:show_report', args=[report_id]))
+
+
+def add_summary(request, report_id, category_id):
+    """添加小结"""
+    report = Report.objects.get(id=report_id)
+    category = Category.objects.get(id=category_id)
+    summaries = Summary.objects.all()
+
+    if request.method != 'POST':
+        form = SummaryForm()
+    else:
+        form = SummaryForm(request.POST)
+        if form.is_valid():
+            data = form.save(commit=False)
+            data.report_id = report_id
+            data.category_id = category_id
+            # 判断同一报告、同一科室下是否有小结，如果有给出提示信息返回，没有就就添加
+            # for summary in summaries:
+            #     if summary.report_id != data.report_id or summary.category_id != data.category_id:
+            #         data.save()
+            #     else:
+            #         message = '该报告下的科室中已经有小结了，请您修改或者删除后再添加。'
+            return HttpResponseRedirect(reverse('reports:show_report', args=[report_id]))
+
+    context = {
+        'form': form,
+        'report': report,
+        'category': category,
+    }
+    return render(request, 'reports/add_summary.html', context)
