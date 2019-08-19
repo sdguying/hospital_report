@@ -254,3 +254,43 @@ def add_summary(request, report_id, category_id):
         'category': category,
     }
     return render(request, 'reports/add_summary.html', context)
+
+
+def del_summary(request, report_id, category_id):
+    """删除小结"""
+    summary = Summary.objects.filter(report_id=report_id, category_id=category_id)
+    report = Report.objects.get(id=report_id)
+    category = Category.objects.get(id=category_id)
+
+    if request.method != 'POST':
+        context = {
+            'summary': summary,
+            'report': report,
+            'category': category,
+        }
+        return render(request, 'reports/del_summary.html', context)
+    else:
+        summary.delete()
+        return HttpResponseRedirect(reverse('reports:show_report', args=[report_id]))
+
+
+def edit_summary(request, report_id, category_id):
+    """修改小结"""
+    summary = Summary.objects.get(report_id=report_id, category_id=category_id)
+    report = Report.objects.get(id=report_id)
+    category = Category.objects.get(id=category_id)
+
+    if request.method != 'POST':
+        form = SummaryForm(instance=summary)
+    else:
+        form = SummaryForm(instance=summary, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('reports:show_report', args=[report_id]))
+
+    context = {
+        'form': form,
+        'report': report,
+        'category': category,
+    }
+    return render(request, 'reports/edit_summary.html', context)

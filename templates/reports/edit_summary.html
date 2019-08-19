@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}修改小结{% endblock %}
+{% block content %}
+    <p>您正在修改《{{ report.title }}》的《{{ category.name }}》中的小结。</p>
+    <form action="{% url 'reports:edit_summary' report.id category.id %}" method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <button name="submit">提交/返回</button>
+    </form>
+{% endblock %}

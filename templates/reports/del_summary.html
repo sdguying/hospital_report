@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}删除小结{% endblock %}
+{% block content %}
+    <p>您确定要删除《{{ report.title }}》的《{{ category.name }}》中的小结吗？</p>
+    <form action="{% url 'reports:del_summary' report.id category.id %}" method="post">{% csrf_token %}
+
+        <button name="submit">提交</button> - <a href="{% url 'reports:show_report' report.id %}">放弃</a>
+    </form>
+{% endblock %}
