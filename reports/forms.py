@@ -81,14 +81,10 @@ class SummaryForm(forms.ModelForm):
     class Meta:
         model = Summary
         fields = [
-            'report',
-            'category',
             'content',
             'doctor',
         ]
         labels = {
-            'report': '所属报告',
-            'category': '所属科室',
             'content': '小结内容',
             'doctor': '小结医生'
         }
