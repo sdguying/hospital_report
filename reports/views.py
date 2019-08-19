@@ -245,18 +245,12 @@ def add_summary(request, report_id, category_id):
             summary_data = form.save(commit=False)
             summary_data.report_id = report.id
             summary_data.category_id = category.id
-            try:
-                Summary.objects.filter(report_id=report.id, category_id=category.id)
-            except:
-                summary_data.save()
-            # else:
-            #     message = '该报告下的科室中已经有小结了，请您修改或者删除后再添加。'
+            summary_data.save()
             return HttpResponseRedirect(reverse('reports:show_report', args=[report.id]))
 
     context = {
         'form': form,
         'report': report,
         'category': category,
-        # 'message': message,
     }
     return render(request, 'reports/add_summary.html', context)
