@@ -28,4 +28,7 @@ urlpatterns = [
     path('add/<int:report_id>/<int:category_id>/add_summary.html', views.add_summary, name='add_summary'),
     path('del/<int:report_id>/<int:category_id>/del_summary.html', views.del_summary, name='del_summary'),
     path('edit/<int:report_id>/<int:category_id>/edit_summary.html', views.edit_summary, name='edit_summary'),
+
+    # 总监报告路由
+    path('add/<int:report_id>/add_conclusion.html', views.add_conclusion, name='add_conclusion')
 ]

@@ -1,7 +1,7 @@
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
 from .models import Report, Entry, Category, Summary, Conclusion
-from .forms import ReportForm, CategoryForm_w, EntryForm, SummaryForm
+from .forms import ReportForm, CategoryForm_w, EntryForm, SummaryForm, ConclusionForm
 
 # Create your views here.
 
@@ -297,3 +297,18 @@ def edit_summary(request, report_id, category_id):
     }
     return render(request, 'reports/edit_summary.html', context)
 
+
+def add_conclusion(request, report_id):
+    """添加总检报告"""
+    if request.method != 'POST':
+        form = ConclusionForm()
+    else:
+        form = ConclusionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('reports:show_report', args=[report_id]))
+    context = {
+        'form': form,
+        'report_id': report_id,
+    }
+    return render(request, 'reports/add_conclusion.html', context)

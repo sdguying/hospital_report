@@ -3,7 +3,7 @@ reports表单
 """
 
 from django import forms
-from .models import Report, Category, Entry, Summary
+from .models import Report, Category, Entry, Summary, Conclusion
 
 
 class ReportForm(forms.ModelForm):
@@ -90,3 +90,19 @@ class SummaryForm(forms.ModelForm):
         }
 
 
+class ConclusionForm(forms.ModelForm):
+    """总检报告表单"""
+    class Meta:
+        model = Conclusion
+        fields = [
+            'overview',
+            'proposal',
+            'summary_date',
+            'summary_doctor',
+        ]
+        labels = {
+            'overview': '综述',
+            'proposal': '建议',
+            'summary_date': '时间',
+            'summary_doctor': '总检医生',
+        }
