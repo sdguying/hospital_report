@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 {% block title %}增加总检报告{% endblock %}
 {% block content %}
-    <form action="{% url 'reports:add_conclusion' report_id %}" method="post">{% csrf_token %}
+    <p>为《{{ report.title }}》增加综合报告：</p>
+    <form action="{% url 'reports:add_conclusion' report.id %}" method="post">{% csrf_token %}
         {{ form.as_p }}
-        <button name="submit">提交</button>
+        <button name="submit">提交</button> - <a href="{% url 'reports:show_report' report.id %}">返回报告</a>
+    {{ message }}
     </form>
 {% endblock %}

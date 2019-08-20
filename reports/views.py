@@ -300,18 +300,24 @@ def edit_summary(request, report_id, category_id):
 
 def add_conclusion(request, report_id):
     """添加总检报告"""
+    report = Report.objects.get(id=report_id)
+    message = ''
     if request.method != 'POST':
         form = ConclusionForm()
     else:
         form = ConclusionForm(request.POST)
-        if form.is_valid():
+        conclusion = Conclusion.objects.all()
+        if form.is_valid() and report_id not in [ con.report_id for con in conclusion ]:
             data = form.save(commit=False)
             data.report_id = report_id
             data.save()
             return HttpResponseRedirect(reverse('reports:show_report', args=[report_id]))
+        else:
+            message = '该报告下已经存在总检报告，不允许再添加了'
     context = {
         'form': form,
-        'report_id': report_id,
+        'report': report,
+        'message': message,
     }
     return render(request, 'reports/add_conclusion.html', context)
 
