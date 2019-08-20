@@ -90,13 +90,15 @@
                     <p>还没有添加具体的检查项目，现在就从左边栏表单开始添加吧</p>
             {% endfor %}
 
-                <p>《{{ report.title }}》的总结报告：<a href="{% url 'reports:add_conclusion' report.id %}">添加总检报告</a></p>
+                <p>《{{ report.title }}》的总结报告：<a href="{% url 'reports:add_conclusion' report.id %}">添加</a></p>
             {% for con in conclusion %}
                 {% if con.report_id == report.id %}
-                    {{ con.overview }}
-                    {{ con.proposal }}
-                    {{ con.summary_date }}
-                    {{ con.summary_doctor }}
+                    <p>综述：{{ con.overview }}</p>
+                    <p>建议：{{ con.proposal }}</p>
+                    <p>总检时间：{{ con.summary_date }}</p>
+                    <p>总检医生：{{ con.summary_doctor }}</p>
+                    <p><a href="{% url 'reports:edit_conclusion' report.id %}">修改</a> -
+                    <a href="{% url 'reports:del_conclusion' report.id %}">删除</a></p>
                 {% endif %}
             {% empty %}
                 <p>还没有总结，您可以点击“添加”为该报告新增总结报告</p>

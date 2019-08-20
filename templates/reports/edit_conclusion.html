@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}修改总检{% endblock %}
+{% block content %}
+    <form action="{% url 'reports:edit_conclusion' report_id %}" method="post">{% csrf_token %}
+        <p>综述：{{ form.overview }}</p>
+        <p>建议：{{ form.proposal }}</p>
+        <p>总检医生：{{ form.summary_doctor }}</p>
+        <p>总检时间：{{ form.summary_date }}</p>
+        <button name="submit">提交</button>
+    </form>
+{% endblock %}

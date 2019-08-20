@@ -314,3 +314,40 @@ def add_conclusion(request, report_id):
         'report_id': report_id,
     }
     return render(request, 'reports/add_conclusion.html', context)
+
+
+def edit_conclusion(request, report_id):
+    """修改总检"""
+    conclusion = Conclusion.objects.get(report_id=report_id)
+
+    if request.method != 'POST':
+        form = ConclusionForm(instance=conclusion)
+    else:
+        form = ConclusionForm(instance=conclusion, data=request.POST)
+        if form.is_valid():
+            data = form.save(commit=False)
+            data.report_id = report_id
+            data.save()
+            return HttpResponseRedirect(reverse('reports:show_report', args=[report_id]))
+
+    context = {
+        'form': form,
+        'report_id': report_id,
+    }
+    return render(request, 'reports/edit_conclusion.html', context)
+
+
+def del_conclusion(request, report_id):
+    """删除总检"""
+    conclusion = Conclusion.objects.get(report_id=report_id)
+    report = Report.objects.get(id=report_id)
+
+    if request.method != 'POST':
+        context = {
+            'conclusion': conclusion,
+            'report': report,
+        }
+        return render(request, 'reports/del_conclusion.html', context)
+    else:
+        conclusion.delete()
+        return HttpResponseRedirect(reverse('reports:show_report', args=[report_id]))
