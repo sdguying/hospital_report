@@ -305,7 +305,9 @@ def add_conclusion(request, report_id):
     else:
         form = ConclusionForm(request.POST)
         if form.is_valid():
-            form.save()
+            data = form.save(commit=False)
+            data.report_id = report_id
+            data.save()
             return HttpResponseRedirect(reverse('reports:show_report', args=[report_id]))
     context = {
         'form': form,

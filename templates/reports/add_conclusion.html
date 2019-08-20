@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}增加总检报告{% endblock %}
 {% block content %}
-    <form action="{% url 'reports:add_conclusion' report_id %}">{% csrf_token %}
+    <form action="{% url 'reports:add_conclusion' report_id %}" method="post">{% csrf_token %}
         {{ form.as_p }}
         <button name="submit">提交</button>
     </form>
