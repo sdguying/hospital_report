@@ -1,6 +1,6 @@
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
-from .models import Report, Entry, Category, Summary
+from .models import Report, Entry, Category, Summary, Conclusion
 from .forms import ReportForm, CategoryForm_w, EntryForm, SummaryForm
 
 # Create your views here.
@@ -29,6 +29,7 @@ def reports_index(request):
 def show_report(request, report_id):
     """体检报告详细内容显示页面"""
     report = Report.objects.get(id=report_id)
+    conclusion = Conclusion.objects.all()
 
     if request.method != 'POST':
         form = EntryForm()
@@ -63,6 +64,7 @@ def show_report(request, report_id):
         'report': report,
         'dicts': dicts,
         'summaries': summaries,
+        'conclusion': conclusion,
         'form': form,
     }
     return render(request, 'reports/show_report.html', context)
@@ -294,3 +296,4 @@ def edit_summary(request, report_id, category_id):
         'category': category,
     }
     return render(request, 'reports/edit_summary.html', context)
+

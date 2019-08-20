@@ -78,7 +78,8 @@
 {#                                    <p>小结内容：{{ summary.content }} ；小结医生：{{ summary.doctor }}。 - <a href="#">修改</a></p>#}
 {#                                {% endif %}#}
 {#                            {% endfor %}#}
-{#                            因为entries里面数据的filed:category_id都是一样的，下面这一行和上面被注释的功能一样，可以直接用entries.0索引出一条数据，没必要循环#}
+{#                            因为entries里面数据的filed:category_id都是一样的，下面这一行和上面被注释的功能一样，#}
+{#                            可以直接用entries.0索引出一条数据，没必要循环#}
                             {% if entries.0.category_id == summary.category_id %}
                                 <p>小结内容：{{ summary.content }} ；小结医生：{{ summary.doctor }}。
                                     <a href="{% url 'reports:del_summary' report.id entries.0.category_id %}">删除</a> -
@@ -90,6 +91,19 @@
             {% endfor %}
 
             </td>
+        </tr>
+        <tr>
+            <td>《{{ report.title }}》的总结报告：</td>
+            {% for con in conclusion %}
+                {% if con.report_id == report.id %}
+                    <td>{{ con.overview }}</td>
+                    <td>{{ con.proposal }}</td>
+                    <td>{{ con.summary_date }}</td>
+                    <td>{{ con.summary_doctor }}</td>
+                {% endif %}
+            {% empty %}
+                <p>还没有总结，您可以点击“添加”为该报告新增总结报告</p>
+            {% endfor %}
         </tr>
     </table>
 {% endblock %}
