@@ -33,4 +33,7 @@ urlpatterns = [
     path('add/<int:report_id>/add_conclusion.html', views.add_conclusion, name='add_conclusion'),
     path('edit/<int:report_id>/edit_conclusion.html', views.edit_conclusion, name='edit_conclusion'),
     path('del/<int:report_id>/del_conclusion.html', views.del_conclusion, name='del_conclusion'),
+
+    # 数据图形路由
+    path('mat/<int:entry_id>/mat.html', views.mat, name='mat'),
 ]

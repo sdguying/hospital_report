@@ -357,3 +357,28 @@ def del_conclusion(request, report_id):
     else:
         conclusion.delete()
         return HttpResponseRedirect(reverse('reports:show_report', args=[report_id]))
+
+
+"""
+以下是数据图形化视图
+"""
+import matplotlib.pyplot as plt
+
+def mat(request, entry_id):
+    """entry的数据可视化视图"""
+    entry = Entry.objects.get(id=entry_id)
+    same_name_entries = Entry.objects.filter(name=entry.name).order_by('report_id')
+
+    try:
+        entry_check_results_list = [ int(same_name_entry.check_results) for same_name_entry in same_name_entries ]
+    except ValueError:
+        pass
+    else:
+        plt.plot(entry_check_results_list)
+        plt.savefig('media/reports/{id}.png'.format(id=entry_id))
+
+    context = {
+        'entry': entry,
+    }
+
+    return render(request, 'reports/show_mat.html', context)

@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block title %}图形显示{% endblock %}
+{% block content %}
+    <p>历年来《{{ entry.name }}》的走势图：</p>
+    <p><img src="/media/reports/{{ entry.id }}.png" alt="{{ entry.name }}走势图"></p>
+{% endblock %}
