@@ -1,7 +1,9 @@
+import matplotlib.pyplot as plt
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
 from .models import Report, Entry, Category, Summary, Conclusion
 from .forms import ReportForm, CategoryForm_w, EntryForm, SummaryForm, ConclusionForm
+
 
 # Create your views here.
 
@@ -362,7 +364,7 @@ def del_conclusion(request, report_id):
 """
 以下是数据图形化视图
 """
-import matplotlib.pyplot as plt
+
 
 def mat(request, entry_id):
     """entry的数据可视化视图"""
@@ -372,13 +374,11 @@ def mat(request, entry_id):
     try:
         entry_check_results_list = [ int(same_name_entry.check_results) for same_name_entry in same_name_entries ]
     except ValueError:
-        pass
+        return HttpResponseRedirect(reverse('reports:show_report', args=[entry.report_id]))
     else:
         plt.plot(entry_check_results_list)
-        plt.savefig('media/reports/{id}.png'.format(id=entry_id))
-
-    context = {
-        'entry': entry,
-    }
-
-    return render(request, 'reports/show_mat.html', context)
+        plt.savefig('static/images/reports/{id}.png'.format(id=entry_id))
+        context = {
+            'entry': entry,
+        }
+        return render(request, 'reports/show_mat.html', context)
