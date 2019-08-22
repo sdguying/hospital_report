@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
-{% load static %}
 {% block title %}图形显示{% endblock %}
 {% block content %}
-
+{% load reports_func %}
     <p>历年来《{{ entry.name }}》的走势图：</p>
-    <p><img src="{% static '/images/reports/{id}.png' %}" alt="{{ entry.name }}走势图"></p>
+    <p><img src="{% get_img_url entry %}" alt="{{ entry.name }}走势图"></p>
 {% endblock %}
