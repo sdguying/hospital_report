@@ -378,14 +378,17 @@ def mat(request, entry_id):
     else:
         counter = len(entry_check_results_list)
         years = 2009
-        names =
-        plt.bar(entry_check_results_list)
+        x_l = []
+        for x in range(counter):
+            x_l.append(years + x)
+        plt.plot(x_l, entry_check_results_list)
         # 设置图表标题，并给坐标轴加上标签
         plt.title('square number', fontsize=24)
         plt.xlabel('year', fontsize=14)
         plt.ylabel('value', fontsize=14)
-        #设置刻度标记的大小
-        plt.tick_params(axis='both', labalsize=14)
+
+        # 设置刻度标记的大小
+        # plt.tick_params(axis='both', labalsize=14)
         plt.savefig('static/images/reports/{id}.png'.format(id=entry_id))
         context = {
             'entry': entry,
