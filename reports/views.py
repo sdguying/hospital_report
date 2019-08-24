@@ -370,15 +370,15 @@ def mat(request, entry_id):
     """entry的数据可视化视图"""
     entry = Entry.objects.get(id=entry_id)
     same_name_entries = Entry.objects.filter(name=entry.name).order_by('report_id')
+    x_l = []
 
     try:
-        entry_check_results_list = [ int(same_name_entry.check_results) for same_name_entry in same_name_entries ]
+        entry_check_results_list = [ float(same_name_entry.check_results) for same_name_entry in same_name_entries ]
+        counter = len(entry_check_results_list)
     except ValueError:
         return HttpResponseRedirect(reverse('reports:show_report', args=[entry.report_id]))
     else:
-        counter = len(entry_check_results_list)
         years = 2009
-        x_l = []
         for x in range(counter):
             x_l.append(years + x)
         plt.plot(x_l, entry_check_results_list)
