@@ -1,5 +1,4 @@
 import pygal
-import matplotlib.pyplot as plt
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
 from .models import Report, Entry, Category, Summary, Conclusion
