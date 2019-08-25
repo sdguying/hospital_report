@@ -1,3 +1,4 @@
+import pygal
 import matplotlib.pyplot as plt
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
@@ -368,29 +369,59 @@ def del_conclusion(request, report_id):
 
 def mat(request, entry_id):
     """entry的数据可视化视图"""
+    # 选出模板中点选的某个具体的检查项目，然后把相同名字的项目都选出来
     entry = Entry.objects.get(id=entry_id)
     same_name_entries = Entry.objects.filter(name=entry.name).order_by('report_id')
-    x_l = []
 
-    try:
-        entry_check_results_list = [ float(same_name_entry.check_results) for same_name_entry in same_name_entries ]
-        counter = len(entry_check_results_list)
-    except ValueError:
-        return HttpResponseRedirect(reverse('reports:show_report', args=[entry.report_id]))
-    else:
-        years = 2009
-        for x in range(counter):
-            x_l.append(years + x)
-        plt.plot(x_l, entry_check_results_list)
-        # 设置图表标题，并给坐标轴加上标签
-        plt.title('square number', fontsize=24)
-        plt.xlabel('year', fontsize=14)
-        plt.ylabel('value', fontsize=14)
+    # 从这些相同名字的检查项目中做出两个列表，一个是检查结果的列表，一个是这些项目的所属报告的id列表
+    entry_check_results_list = []
+    reports_id = []
+    for same_name_entry in same_name_entries:
+        reports_id.append(same_name_entry.report_id)
+        entry_check_results_list.append(same_name_entry.check_results)
 
-        # 设置刻度标记的大小
-        # plt.tick_params(axis='both', labalsize=14)
-        plt.savefig('static/images/reports/{id}.png'.format(id=entry_id))
+    # 通过所属报告的id列表做出报告的标题的列表
+    reports_title = []   # 在生成图像的时候，要用到的参数，x轴的labels
+    for report_id in reports_id:
+        report = Report.objects.get(id=report_id)
+        reports_title.append(report.title)
+
+    # 通过检查结果的列表筛选出是int或者float的数据，如果不是数字的不生成图像
+    # reports_title列表中的报告和entry_check_results_list列表中的数据是一一对应的
+    # 下面的代码是逐一转换entry_check_results_list列表中的元素，如果不能转换成整数且不能转换为浮点数，说明是文本
+    # 则去掉该值，相应的reports_title列表中也要在相应的位置去掉一个值
+    int_or_float_list = []   # 在生成图像的时候，要用到的参数，Y轴的数值
+    count = len(entry_check_results_list) + 1
+    for result in entry_check_results_list:
+        count -= 1
+        try:
+            i_result = int(result)
+        except:
+            try:
+                f_result = float(result)
+            except:
+                del reports_title[-count]
+            else:
+                int_or_float_list.append(f_result)
+        else:
+            int_or_float_list.append(i_result)
+
+    # 生成图像
+    if int_or_float_list:
+        # pygal生成柱形图
+        hist = pygal.Bar()
+
+        hist.title = '历年报告' + str(entry.name) + '的指标柱形图'
+        hist.x_labels = reports_title
+        hist.x_title = '年份'
+        hist.y_title = '数值'
+
+        hist.add('指标', int_or_float_list)
+        hist.render_to_file('static/images/reports/{id}.svg'.format(id=entry.id))
+
         context = {
             'entry': entry,
         }
         return render(request, 'reports/show_mat.html', context)
+    else:
+        return HttpResponseRedirect(reverse('reports:show_report', args=[entry.report_id]))
