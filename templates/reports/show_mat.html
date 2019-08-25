@@ -2,6 +2,7 @@
 {% block title %}图形显示{% endblock %}
 {% block content %}
 {% load reports_func %}
-    <p>历年来《{{ entry.name }}》的走势图：</p>
+    <p>历年来《{{ entry.name }}》的数据图：</p>
     <p><img src="{% get_img_url entry %}" alt="{{ entry.name }}走势图"></p>
+    <p><a href="{% url 'reports:show_report' entry.report_id %}">返回</a></p>
 {% endblock %}
