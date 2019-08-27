@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # 自建APP
     'home',
     'reports',
+    'users',
 
 ]
 
@@ -129,5 +130,5 @@ STATICFILES_DIRS = (
 # MEDIA_ROOT = 'media/'
 # MEDIA_URL = 'media/'
 
-# LOGIN_URL = '/users/login/'
+LOGIN_URL = '/users/login/'
 
