@@ -12,7 +12,7 @@ class Report(models.Model):
         ('男', '男'),
         ('女', '女'),
     )
-    # owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='所属用户')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='所属用户')
 
     hospital = models.CharField(max_length=200, verbose_name='医院')
     title = models.CharField(max_length=80, verbose_name='标题', default='20**年报告', unique=True)
@@ -34,7 +34,7 @@ class Report(models.Model):
 
 class Category(models.Model):
     """某份报告的检查科室"""
-    # owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='所属用户')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='所属用户')
 
     name = models.CharField(max_length=200, verbose_name='科室大类', unique=False)
 
