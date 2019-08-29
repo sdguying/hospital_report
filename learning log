@@ -106,6 +106,28 @@ def logout_view(request):
 2、在需要限制访问的视图函数前加@login_required，需要导入：from django.contrib.auth.decorators import login_required
 （建议在全部视图函数前加限制，然后再选取不需要限制的视图函数，把@login_required去掉）
 
-3、因为在一级数据表中有了owner字段，所以在视图函数中需要保存数据的时候要自动保存当前用户的id
+3、修改views内容，使保存数据的owner为当前用户的数据，
+    （1）因为在一级数据表中有了owner字段，所以在视图函数中需要保存数据的时候要自动保存当前用户的id，且展示的条目要筛选出用户名下的条目。
+    列子：
+    @login_required
+    def reports_index(request):
+        """体检报告首页"""
+        # 添加新的报告
+        if request.method != 'POST':
+            form = ReportForm()
+        else:
+            form = ReportForm(request.POST)
+            if form.is_valid():
+                new_report = form.save(commit=False)
+                new_report.owner = request.user    # 把提交的数据归到当前用户
+                new_report.save()
+                return HttpResponseRedirect(reverse('reports:reports_index'))
 
+        reports = Report.objects.filter(owner=request.user).order_by('-date')    # 当前页显示的数据为当前用户的数据
+
+        context = {
+            'reports': reports,
+            'form': form,
+        }
+        return render(request, 'reports/reports_index.html', context)
 

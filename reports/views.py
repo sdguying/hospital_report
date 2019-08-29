@@ -12,8 +12,6 @@ from .forms import ReportForm, CategoryForm_w, EntryForm, SummaryForm, Conclusio
 @login_required
 def reports_index(request):
     """体检报告首页"""
-    reports = Report.objects.all()
-
     # 添加新的报告
     if request.method != 'POST':
         form = ReportForm()
@@ -22,7 +20,10 @@ def reports_index(request):
         if form.is_valid():
             new_report = form.save(commit=False)
             new_report.owner = request.user
+            new_report.save()
             return HttpResponseRedirect(reverse('reports:reports_index'))
+
+    reports = Report.objects.filter(owner=request.user).order_by('-date')
 
     context = {
         'reports': reports,
@@ -42,9 +43,10 @@ def show_report(request, report_id):
     else:
         form = EntryForm(request.POST)
         if form.is_valid():
-            data = form.save(commit=False)
-            data.report_id = report_id
-            data.save()
+            new_entry = form.save(commit=False)
+            new_entry.report_id = report_id
+            new_entry.owner = request.user
+            new_entry.save()
             return HttpResponseRedirect(reverse('reports:show_report', args=[report.id]))
     # 单一报告下所有的具体检查项目
     entries = Entry.objects.filter(report_id=report_id)
