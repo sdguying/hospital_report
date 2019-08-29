@@ -28,7 +28,13 @@ def logout_view(request):
     return HttpResponseRedirect(reverse('index:index'))
 
 
-def check_project_owner(request, report):
+def check_report_owner(request, report):
     """检查请求的报告是否属于当前用户，避免使用输入链接的方式打开别人的工程信息"""
     if report.owner != request.user:
+        raise Http404
+
+
+def check_category_owner(request, category):
+    """检查请求的科室是否属于当前用户，避免使用输入链接的方式打开别人的工程信息"""
+    if category.owner != request.user:
         raise Http404

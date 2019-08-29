@@ -101,14 +101,15 @@ def logout_view(request):
 至此就实现了登录、注册、登出的功能，但是并没有把数据库和视图函数与用户关联起来，下面的工作就是关联相关内容：
 1、修改models.py，在一级数据表中增加owner字段
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='所属用户')  # 在生成新的数据表的时候可能会报错
-    如果没有重要数据，可以删除开发数据库db.sqlite3，然后再migrate
+    如果没有重要数据，可以删除开发数据库db.sqlite3，然后再migrate。如果有数据，在让你提供默认值的时候输入1（admin）就可以了，把现有的数据都
+    归为admin这个用户。
 
 2、在需要限制访问的视图函数前加@login_required，需要导入：from django.contrib.auth.decorators import login_required
 （建议在全部视图函数前加限制，然后再选取不需要限制的视图函数，把@login_required去掉）
 
 3、修改views内容，使保存数据的owner为当前用户的数据，
     （1）因为在一级数据表中有了owner字段，所以在视图函数中需要保存数据的时候要自动保存当前用户的id，且展示的条目要筛选出用户名下的条目。
-    列子：
+    例子：
     @login_required
     def reports_index(request):
         """体检报告首页"""
@@ -119,7 +120,7 @@ def logout_view(request):
             form = ReportForm(request.POST)
             if form.is_valid():
                 new_report = form.save(commit=False)
-                new_report.owner = request.user    # 把提交的数据归到当前用户
+                new_report.owner = request.user                                  # 把提交的数据归到当前用户
                 new_report.save()
                 return HttpResponseRedirect(reverse('reports:reports_index'))
 
@@ -130,4 +131,10 @@ def logout_view(request):
             'form': form,
         }
         return render(request, 'reports/reports_index.html', context)
+    (2)为了防止输入网址改变id获取其他用户的数据，还需要保护数据的操作
+        def check_report_owner(request, report):
+            """检查请求的报告是否属于当前用户，避免使用输入链接的方式打开别人的工程信息"""
+            if report.owner != request.user:
+                raise Http404
+        在视图函数中合适的位置使用该方法，保护用户数据。
 

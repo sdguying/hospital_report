@@ -3,7 +3,8 @@ from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from .models import Report, Entry, Category, Summary, Conclusion
-from .forms import ReportForm, CategoryForm_w, EntryForm, SummaryForm, ConclusionForm
+from .forms import ReportForm, CategoryForm, EntryForm, SummaryForm, ConclusionForm
+from users.views import check_report_owner, check_category_owner
 
 
 # Create your views here.
@@ -36,31 +37,36 @@ def reports_index(request):
 def show_report(request, report_id):
     """体检报告详细内容显示页面"""
     report = Report.objects.get(id=report_id)
+    # 确认请求者是否为登录用户
+    check_report_owner(request, report)
+
     conclusion = Conclusion.objects.all()
 
+    # 添加具体检查项目的表单
     if request.method != 'POST':
         form = EntryForm()
+        # form.category.objects.filter(owner=request.user)
     else:
         form = EntryForm(request.POST)
         if form.is_valid():
             new_entry = form.save(commit=False)
             new_entry.report_id = report_id
-            new_entry.owner = request.user
             new_entry.save()
             return HttpResponseRedirect(reverse('reports:show_report', args=[report.id]))
-    # 单一报告下所有的具体检查项目
+
+    # 该报告下所有的具体检查项目
     entries = Entry.objects.filter(report_id=report_id)
-    categories = Category.objects.all()  # 所有的科室
-    # set排序并去重，建立一个不重复的该报告有的所有科室id，作为字典的key
+    categories = Category.objects.filter(owner=request.user)  # 所有的该用户下的科室
+    # set排序并去重，建立一个不重复的该报告下所有科室id，作为字典的key
     category_id_list = list(set([entry.category_id for entry in entries]))
 
     # 通过entry.category_id找出该报告中有的科室名称放到列表中
     dicts ={}
     for category in categories:
         if category.id in category_id_list:
-            # 把一个科室大类下的项目放到列表里
+            # 把一个科室下的项目放到列表里
             entry_list = [ entry for entry in entries if entry.category_id == category.id ]
-            # 科室名称作为key，该科室大类下的检查项目作为value，放入dicts，循环
+            # 科室名称作为key，该科室下的检查项目作为value，放入dicts，循环
             dicts[category.name] = entry_list
         else:
             continue
@@ -82,6 +88,8 @@ def show_report(request, report_id):
 def edit_report_info(request, report_id):
     """修改报告基本信息"""
     report = Report.objects.get(id=report_id)
+    # 确认请求者是否为登录用户
+    check_report_owner(request, report)
 
     if request.method != 'POST':
         form = ReportForm(instance=report)
@@ -102,6 +110,9 @@ def edit_report_info(request, report_id):
 def del_report(request, report_id):
     """删除报告功能"""
     report = Report.objects.get(id=report_id)
+    # 确认请求者是否为登录用户
+    check_report_owner(request, report)
+
     if request.method != 'POST':
         context = {
             'report': report,
@@ -123,17 +134,24 @@ def del_report(request, report_id):
 @login_required
 def edit_global_category(request, report_id):
     """编辑全局科室"""
-    categories = Category.objects.all()
+    report = Report.objects.get(id=report_id)
+    # 确认请求者是否为登录用户
+    check_report_owner(request, report)
+
+    categories = Category.objects.filter(owner=request.user)
 
     if request.method != 'POST':
-        form = CategoryForm_w()
+        form = CategoryForm()
     else:
-        form = CategoryForm_w(request.POST)
+        form = CategoryForm(request.POST)
         if form.is_valid():
-            form.save()
+            new_category = form.save(commit=False)
+            new_category.owner = request.user
+            new_category.save()
+
     context = {
         'categories': categories,
-        'report_id': report_id,
+        'report': report,
         'form': form,
     }
     return render(request, 'reports/edit_global_category.html', context)
@@ -145,9 +163,9 @@ def edit_category(request, report_id, category_id):
     category = Category.objects.get(id=category_id)
 
     if request.method != 'POST':
-        form = CategoryForm_w(instance=category)
+        form = CategoryForm(instance=category)
     else:
-        form = CategoryForm_w(instance=category, data=request.POST)
+        form = CategoryForm(instance=category, data=request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('reports:edit_global_category', args=[report_id]))

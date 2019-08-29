@@ -9,18 +9,18 @@
         {% for category in categories %}
             <tr>
                 <td>
-                    {{ category.name }} - <a href="{% url 'reports:edit_category' report_id category.id %}">修改</a>
-                    - <a href="{% url 'reports:del_category' report_id category.id %}">删除</a>
+                    {{ category.name }} - <a href="{% url 'reports:edit_category' report.id category.id %}">修改</a>
+                    - <a href="{% url 'reports:del_category' report.id category.id %}">删除</a>
                 </td>
             </tr>
             {% empty %}
             <p>还没有科室，那就开始添加吧</p>
         {% endfor %}
             <tr>
-                <td><form action="{% url 'reports:edit_global_category' report_id %}" method="post">{% csrf_token %}
+                <td><form action="{% url 'reports:edit_global_category' report.id %}" method="post">{% csrf_token %}
                     {{ form.as_p }}
                     <button name="submit">新增</button>
-                    <p><a href="{% url 'reports:show_report' report_id %}">返回来时的报告页</a></p>
+                    <p><a href="{% url 'reports:show_report' report.id %}">返回来时的报告页</a></p>
                 </form></td>
             </tr>
         </tbody>
