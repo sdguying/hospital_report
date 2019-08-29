@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponseRedirect, reverse
+from django.shortcuts import render, HttpResponseRedirect, reverse, Http404
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 
@@ -22,7 +22,13 @@ def register(request):
     return render(request, 'users/register.html', context)
 
 
-def logout(request):
+def logout_view(request):
     """登出"""
     logout(request)
     return HttpResponseRedirect(reverse('index:index'))
+
+
+def check_project_owner(request, report):
+    """检查请求的报告是否属于当前用户，避免使用输入链接的方式打开别人的工程信息"""
+    if report.owner != request.user:
+        raise Http404

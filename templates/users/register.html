@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% block title %}注册{% endblock %}
 {% block content %}
-    <form action="{% url 'users:register' %}">{% csrf_token %}
+    <form action="{% url 'users:register' %}" method="post">{% csrf_token %}
         {{ form.as_p }}
     <button name="submit">提交</button>
+    <input type="hidden" name="next" value="{% url 'index:index' %}" />
     </form>
 {% endblock %}
