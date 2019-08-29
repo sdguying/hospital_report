@@ -1,6 +1,7 @@
 import pygal
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 from .models import Report, Entry, Category, Summary, Conclusion
 from .forms import ReportForm, CategoryForm_w, EntryForm, SummaryForm, ConclusionForm
 
@@ -8,6 +9,7 @@ from .forms import ReportForm, CategoryForm_w, EntryForm, SummaryForm, Conclusio
 # Create your views here.
 
 
+@login_required
 def reports_index(request):
     """体检报告首页"""
     reports = Report.objects.all()
@@ -18,7 +20,8 @@ def reports_index(request):
     else:
         form = ReportForm(request.POST)
         if form.is_valid():
-            form.save()
+            new_report = form.save(commit=False)
+            new_report.owner = request.user
             return HttpResponseRedirect(reverse('reports:reports_index'))
 
     context = {
@@ -28,6 +31,7 @@ def reports_index(request):
     return render(request, 'reports/reports_index.html', context)
 
 
+@login_required
 def show_report(request, report_id):
     """体检报告详细内容显示页面"""
     report = Report.objects.get(id=report_id)
@@ -72,6 +76,7 @@ def show_report(request, report_id):
     return render(request, 'reports/show_report.html', context)
 
 
+@login_required
 def edit_report_info(request, report_id):
     """修改报告基本信息"""
     report = Report.objects.get(id=report_id)
@@ -91,6 +96,7 @@ def edit_report_info(request, report_id):
     return render(request, 'reports/edit_report_info.html', context)
 
 
+@login_required
 def del_report(request, report_id):
     """删除报告功能"""
     report = Report.objects.get(id=report_id)
@@ -112,6 +118,7 @@ def del_report(request, report_id):
             return render(request, 'reports/del_report.html', context)
 
 
+@login_required
 def edit_global_category(request, report_id):
     """编辑全局科室"""
     categories = Category.objects.all()
@@ -130,6 +137,7 @@ def edit_global_category(request, report_id):
     return render(request, 'reports/edit_global_category.html', context)
 
 
+@login_required
 def edit_category(request, report_id, category_id):
     """修改科室名称"""
     category = Category.objects.get(id=category_id)
@@ -150,6 +158,7 @@ def edit_category(request, report_id, category_id):
     return render(request, 'reports/edit_category.html', context)
 
 
+@login_required
 def edit_entry(request, entry_id):
     """修改检查项目"""
     entry = Entry.objects.get(id=entry_id)
@@ -169,6 +178,7 @@ def edit_entry(request, entry_id):
     return render(request, 'reports/edit_entry.html', context)
 
 
+@login_required
 def del_category(request, report_id, category_id):
     """删除全局科室"""
     category = Category.objects.get(id=category_id)
@@ -194,6 +204,7 @@ def del_category(request, report_id, category_id):
             return HttpResponseRedirect(reverse('reports:edit_global_category', args=[report_id]))
 
 
+@login_required
 def del_entry(request, entry_id):
     """删除具体检查项目"""
     entry = Entry.objects.get(id=entry_id)
@@ -216,6 +227,7 @@ def find_category_name(x_id):
             return category.name
 
 
+@login_required
 def del_entries_of_category(request, report_id, category_id):
     """删除某个报告下面的整个科室下面的所有具体检查项目"""
     entries = Entry.objects.filter(report_id=report_id, category_id=category_id)
@@ -236,6 +248,7 @@ def del_entries_of_category(request, report_id, category_id):
         return HttpResponseRedirect(reverse('reports:show_report', args=[report_id]))
 
 
+@login_required
 def add_summary(request, report_id, category_id):
     """添加小结"""
     report = Report.objects.get(id=report_id)
@@ -260,6 +273,7 @@ def add_summary(request, report_id, category_id):
     return render(request, 'reports/add_summary.html', context)
 
 
+@login_required
 def del_summary(request, report_id, category_id):
     """删除小结"""
     summary = Summary.objects.filter(report_id=report_id, category_id=category_id)
@@ -278,6 +292,7 @@ def del_summary(request, report_id, category_id):
         return HttpResponseRedirect(reverse('reports:show_report', args=[report_id]))
 
 
+@login_required
 def edit_summary(request, report_id, category_id):
     """修改小结"""
     summary = Summary.objects.get(report_id=report_id, category_id=category_id)
@@ -300,6 +315,7 @@ def edit_summary(request, report_id, category_id):
     return render(request, 'reports/edit_summary.html', context)
 
 
+@login_required
 def add_conclusion(request, report_id):
     """添加总检报告"""
     report = Report.objects.get(id=report_id)
@@ -324,6 +340,7 @@ def add_conclusion(request, report_id):
     return render(request, 'reports/add_conclusion.html', context)
 
 
+@login_required
 def edit_conclusion(request, report_id):
     """修改总检"""
     conclusion = Conclusion.objects.get(report_id=report_id)
@@ -345,6 +362,7 @@ def edit_conclusion(request, report_id):
     return render(request, 'reports/edit_conclusion.html', context)
 
 
+@login_required
 def del_conclusion(request, report_id):
     """删除总检"""
     conclusion = Conclusion.objects.get(report_id=report_id)
@@ -366,6 +384,7 @@ def del_conclusion(request, report_id):
 """
 
 
+@login_required
 def mat(request, entry_id):
     """entry的数据可视化视图"""
     # 选出模板中点选的某个具体的检查项目，然后把相同名字的项目都选出来

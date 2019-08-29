@@ -98,4 +98,14 @@ def logout_view(request):
         <input type="hidden" name="next" value="{% url 'index:index' %}" />
         </form>
 
-至此就实现了登录、注册、登出的功能，但是
+至此就实现了登录、注册、登出的功能，但是并没有把数据库和视图函数与用户关联起来，下面的工作就是关联相关内容：
+1、修改models.py，在一级数据表中增加owner字段
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='所属用户')  # 在生成新的数据表的时候可能会报错
+    如果没有重要数据，可以删除开发数据库db.sqlite3，然后再migrate
+
+2、在需要限制访问的视图函数前加@login_required，需要导入：from django.contrib.auth.decorators import login_required
+（建议在全部视图函数前加限制，然后再选取不需要限制的视图函数，把@login_required去掉）
+
+3、因为在一级数据表中有了owner字段，所以在视图函数中需要保存数据的时候要自动保存当前用户的id
+
+
