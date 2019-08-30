@@ -32,13 +32,13 @@ class ReportForm(forms.ModelForm):
         }
 
 
-# class CategoryForm(forms.Form):
+# class CategoryForm_select(forms.Form):
 #     """为category模型作一个动态的下拉框"""
 #     category = forms.ChoiceField(label='科室')
 #
 #     def __init__(self, *args, **kwargs):
 #         """"""
-#         super(CategoryForm, self).__init__(*args, **kwargs)
+#         super(CategoryForm_select, self).__init__(*args, **kwargs)
 #         self.fields['category'].choices = (( x.name ) for x in Category.objects.all())
 
 

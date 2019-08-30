@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}详细内容{% endblock %}
 {% block content %}
-    {% load reports_func %}
     <table border="1">
         <tr>
             <th>{{ report.title }} - <a href="{% url 'reports:edit_report_info' report.id %}">修改</a></th>
@@ -22,7 +21,12 @@
                     </tr>
                     <tr>
                         <td><form action="{% url 'reports:show_report' report.id %}" method="post">{% csrf_token %}
-                            <p>所属科室{{ categories }} - <a href="{% url 'reports:edit_global_category' report.id %}">添加/编辑全局科室</a></p>
+                            <p>所属科室:
+                            <select>
+                                {% for category in categories %}
+                                    <option>{{ category }}</option>
+                                {% endfor %}
+                            </select> - <a href="{% url 'reports:edit_global_category' report.id %}">添加/编辑全局科室</a></p>
                             <p>项目{{ form.name }}</p>
                             <p>检查结果{{ form.check_results }}</p>
                             <p>单位{{ form.unit }}</p>
