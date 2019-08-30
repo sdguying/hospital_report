@@ -59,7 +59,7 @@ class EntryForm(forms.ModelForm):
     class Meta:
         model = Entry
         fields = [
-            'category',
+            # 'category',
             'name',
             'check_results',
             'unit',
@@ -67,7 +67,7 @@ class EntryForm(forms.ModelForm):
             'tips',
         ]
         labels = {
-            'category': '所属科室',
+            # 'category': '所属科室',
             'name': '项目名称',
             'check_results': '检查结果',
             'unit': '单位',

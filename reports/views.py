@@ -39,43 +39,45 @@ def show_report(request, report_id):
     report = Report.objects.get(id=report_id)
     # 确认请求者是否为登录用户
     check_report_owner(request, report)
-
+    # 所有的总检报告
     conclusion = Conclusion.objects.all()
+    # 该报告下所有的具体检查项目
+    entries = Entry.objects.filter(report_id=report_id)
+    # 所有的该用户下的科室
+    categories = Category.objects.filter(owner=request.user)
+
+    # set排序并去重，建立一个不重复的该报告下所有科室id，作为字典的key
+    category_id_list = list(set([entry.category_id for entry in entries]))
+
+    # 通过entry.category_id找出该报告中有的科室名称放到列表中
+    dicts = {}
+    for category in categories:
+        if category.id in category_id_list:
+            # 把一个科室下的项目放到列表里
+            entry_list = [entry for entry in entries if entry.category_id == category.id]
+            # 科室名称作为key，该科室下的检查项目作为value，放入dicts，循环
+            dicts[category.name] = entry_list
+        else:
+            continue
 
     # 添加具体检查项目的表单
     if request.method != 'POST':
         form = EntryForm()
-        # form.category.objects.filter(owner=request.user)
     else:
         form = EntryForm(request.POST)
         if form.is_valid():
             new_entry = form.save(commit=False)
             new_entry.report_id = report_id
+
             new_entry.save()
             return HttpResponseRedirect(reverse('reports:show_report', args=[report.id]))
-
-    # 该报告下所有的具体检查项目
-    entries = Entry.objects.filter(report_id=report_id)
-    categories = Category.objects.filter(owner=request.user)  # 所有的该用户下的科室
-    # set排序并去重，建立一个不重复的该报告下所有科室id，作为字典的key
-    category_id_list = list(set([entry.category_id for entry in entries]))
-
-    # 通过entry.category_id找出该报告中有的科室名称放到列表中
-    dicts ={}
-    for category in categories:
-        if category.id in category_id_list:
-            # 把一个科室下的项目放到列表里
-            entry_list = [ entry for entry in entries if entry.category_id == category.id ]
-            # 科室名称作为key，该科室下的检查项目作为value，放入dicts，循环
-            dicts[category.name] = entry_list
-        else:
-            continue
 
     # 小结的显示功能
     summaries = Summary.objects.filter(report_id=report_id)
 
     context = {
         'report': report,
+        'categories': categories,
         'dicts': dicts,
         'summaries': summaries,
         'conclusion': conclusion,
@@ -160,6 +162,10 @@ def edit_global_category(request, report_id):
 @login_required
 def edit_category(request, report_id, category_id):
     """修改科室名称"""
+    report = Report.objects.get(id=report_id)
+    # 确认请求者是否为登录用户
+    check_report_owner(request, report)
+
     category = Category.objects.get(id=category_id)
 
     if request.method != 'POST':
@@ -168,12 +174,12 @@ def edit_category(request, report_id, category_id):
         form = CategoryForm(instance=category, data=request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('reports:edit_global_category', args=[report_id]))
+            return HttpResponseRedirect(reverse('reports:edit_global_category', args=[report.id]))
 
     context = {
         'form': form,
         'category': category,
-        'report_id': report_id,
+        'report': report,
     }
     return render(request, 'reports/edit_category.html', context)
 
