@@ -4,6 +4,7 @@
     {% if user.is_authenticated %}
         你好，{% if user.id == 1 %}<a href="/admin/">{% endif %}{{ user.username }}</a> - <a href="{% url 'users:logout' %}">登出</a>
     {% else %}
-        <a href="{% url 'users:register' %}">注册</a> - <a href="{% url 'users:login' %}">登录</a>
+{#        <a href="{% url 'users:register' %}">注册</a> - #}
+        <a href="{% url 'users:login' %}">登录</a>
     {% endif %}
 </nav>
