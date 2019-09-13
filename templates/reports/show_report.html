@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}详细内容{% endblock %}
 {% block content %}
+{#    {% load reports_func %}#}
     <table border="1">
         <tr>
             <th>{{ report.title }} - <a href="{% url 'reports:edit_report_info' report.id %}">修改</a></th>

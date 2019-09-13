@@ -76,6 +76,7 @@ def show_report(request, report_id):
     summaries = Summary.objects.filter(report_id=report_id)
 
     context = {
+        'request': request,
         'report': report,
         'categories': categories,
         'dicts': dicts,

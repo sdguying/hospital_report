@@ -12,11 +12,9 @@ def get_img_url(img):
 
 
 # @register.filter
-# def filter_owner(request, category):
-#     ca_list = []
-#     for ca in category:
-#         if ca.owner_id == request.user.id:
-#             ca_list.append(ca)
-#         else:
-#             continue
-#     return ca_list
+# def filter_owner(value, request):
+#     if value.owner_id == request.user.id:
+#         pass
+#     else:
+#         value.delete()
+#     return value
